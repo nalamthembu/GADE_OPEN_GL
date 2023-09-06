@@ -24,6 +24,7 @@
     <ProjectGuid>{8f753b9f-4526-43eb-855f-87baad60a177}</ProjectGuid>
     <RootNamespace>OpenGLTemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>TopDeck_OGL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
