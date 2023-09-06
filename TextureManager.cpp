@@ -5,6 +5,7 @@
 TextureManager::TextureManager()
 {
 	textures.insert({ "brick", new Texture("Textures/bricks.png") });
+	textures.insert({ "gold", new Texture("Textures/gold_block.png") });
 }
 
 TextureManager::~TextureManager()

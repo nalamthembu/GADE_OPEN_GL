@@ -20,7 +20,8 @@ void timer(int);
 void Update();
 
 TextureManager* textureManager;
-Cube* cubeGO;
+Cube* cube0;
+Cube* cube1;
 
 Camera* camera;
 
@@ -65,10 +66,6 @@ void init()
     initGameObjects();
 }
 
-float rotation = 0;
-float sinTime = 0;
-float ZPos = 0;
-
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -88,39 +85,27 @@ void timer(int)
     glutTimerFunc(1000 / 60, timer, 0);
 }
 
-
 #pragma region RENDER_GAMEOBJECTS
 
 void cleanup()
 {
-    delete textureManager;
-    delete cubeGO;
-    delete camera;
+    //delete pointers
 }
 
 void initGameObjects()
 {
-    textureManager = new TextureManager;
-    cubeGO = new Cube;
-    cubeGO->name = "Minecraft_Brick";
-    cubeGO->transform->rotation = new Vector3(30, 30, 0);
-    std::cout << cubeGO->name;
-    camera->transform->position = new Vector3(0, 0, 10);
+    //create new pointers
 }
 
 
 void displayGameObjects()
 {
-    textureManager->useTexture("brick");
-    cubeGO->draw();
-    camera->Update();
+    //call draw
 }
 
 void Update()
 {
-    displayGameObjects();
-
-    camera->Update();
+    //called once per frame.
 }
 
 #pragma endregion
