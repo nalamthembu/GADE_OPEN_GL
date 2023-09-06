@@ -1,2 +1,0 @@
-D:\MyGameAndAssets\PROJECTS\OpenGLTemplate\Debug\OpenGLTemplate.exe
-D:\MyGameAndAssets\PROJECTS\OpenGL_Engine\Debug\OpenGLTemplate.exe

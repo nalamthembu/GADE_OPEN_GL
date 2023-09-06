@@ -1,4 +1,0 @@
-﻿  main.cpp
-D:\MyGameAndAssets\PROJECTS\OpenGL_Engine\main.cpp(61,44): warning C4305: 'argument': truncation from 'double' to 'float'
-  OpenGLTemplate.vcxproj -> D:\MyGameAndAssets\PROJECTS\OpenGL_Engine\Debug\OpenGLTemplate.exe
-          1 file(s) copied.
