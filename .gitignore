@@ -221,3 +221,9 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+#other_stuff_bru
+[Dd]ebug
+[.]vs
+*.vcxproj
+*.filters
