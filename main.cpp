@@ -1,5 +1,7 @@
 #include <iostream>
 #include <GL/freeglut.h>
+#include "Components/Camera.h"
+#include "Components/Cube.h"
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -7,16 +9,47 @@ const int WINDOW_HEIGHT = 600;
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
 
+int TARGET_FPS = 60;
+
+Camera* camera;
+Cube* cube;
+
+float t;
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	cube->OnUpdate();
+
+	cube->transform->scale = new Vector3(5, 5, 5);
+
+	cube->transform->rotation = new Vector3(30, t, 0);
+
+	t += 1;
+
 	glutSwapBuffers();
 }
 
 void init()
 {
-	glClearColor(0.3, 0.3, 0.3, 0);
-	gluOrtho2D(0, 1024, 512, 0);
+	camera = new Camera(70, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1F, 1000.0F);
+	std::cout << "TARGET FPS : " << TARGET_FPS << std::endl;
+	cube = new Cube();
+	cube->OnAwake();
+	cube->OnStart();
+}
+
+void freeMemory()
+{
+	delete camera;
+	delete cube;
+}
+
+void timer(int)
+{
+	glutPostRedisplay();
+	glutTimerFunc(1000 / TARGET_FPS, timer, 0);
 }
 
 int main(int argc, char* argv[])
@@ -49,6 +82,8 @@ int main(int argc, char* argv[])
 	glutCreateWindow("TopDeck");
 	init();
 	glutDisplayFunc(display);
+	glutTimerFunc(0, timer, 0);
+	
 	glutMainLoop();
 
 	#pragma endregion
