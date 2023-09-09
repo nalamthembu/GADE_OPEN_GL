@@ -16,4 +16,15 @@ public:
 		this->y = y;
 		this->z = z;
 	}
+
+	float Distance(Vector3 a, Vector3 b)
+	{
+		return sqrt((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
+	}
+
+	float SqrDistance(Vector3 a, Vector3 b)
+	{
+		return sqrt((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
+
+	}
 };
