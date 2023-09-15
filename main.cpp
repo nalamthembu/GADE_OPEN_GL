@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 	glutInitWindowSize(WIDTH, HEIGHT);
 
 	//creating window
-	glutCreateWindow("Top Deck Chess");
+	glutCreateWindow("OpenGL Chess");
 
 	//display function on the screen
 	glutDisplayFunc(display);
