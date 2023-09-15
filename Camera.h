@@ -13,10 +13,12 @@ public:
 	float nearZ;
 	float farZ;
 
+	vec3 position = vec3(0,0,0);
+	vec3 rotation = vec3(0,0,0);
+
 	Camera(float fov, float height, float width, float nearZ, float farZ)
 	{
-		glMatrixMode(GL_PROJECTION);
-
+		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
 		this->fov = fov;
@@ -30,19 +32,33 @@ public:
 		glClearColor(0, 0, 0, 0);
 	}
 
+	void SetPosition(vec3 pos)
+	{
+		glTranslatef(pos.x, pos.y, pos.z);
+	}
+
+	void SetRotation(vec3 rot)
+	{
+		glRotatef(rot.x, 1, 0, 0);
+		glRotatef(rot.y, 0, 1, 0);
+		glRotatef(rot.z, 0, 0, 1);
+	}
+
 	void LookAt(vec3 pos, vec3 tar)
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glMatrixMode(GL_MODELVIEW);
+		position = pos;
 
 		gluLookAt
 		(
-			pos.x, pos.y, pos.z,
+			position.x, position.y, position.z,
 			tar.x, tar.y, tar.z,
 			0.0, 1.0, 0.0
-
 		);
+	}
+
+	void Update()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void LateUpdate()

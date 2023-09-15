@@ -19,25 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="components\GameObject.cpp" />
+    <ClCompile Include="components\Settings.cpp" />
+    <ClCompile Include="components\Terrain.cpp" />
+    <ClCompile Include="components\Texture.cpp" />
+    <ClCompile Include="components\TextureCube.cpp" />
+    <ClCompile Include="components\TextureManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="Settings.cpp" />
-    <ClCompile Include="SphereGameObject.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureCube.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Pixel.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="Settings.h" />
-    <ClInclude Include="SphereGameObject.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureCube.h" />
-    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="components\Camera.h" />
+    <ClInclude Include="components\GameObject.h" />
+    <ClInclude Include="components\Pixel.h" />
+    <ClInclude Include="components\Settings.h" />
+    <ClInclude Include="components\Terrain.h" />
+    <ClInclude Include="components\Texture.h" />
+    <ClInclude Include="components\TextureCube.h" />
+    <ClInclude Include="components\TextureManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
