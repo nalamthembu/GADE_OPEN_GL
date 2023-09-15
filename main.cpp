@@ -1,91 +1,162 @@
-#include <iostream>
 #include <GL/freeglut.h>
-#include "Components/Camera.h"
-#include "Components/Cube.h"
+#include <iostream>
+#include "GameObject.h"
+#include "SphereGameObject.h"
+#include "Settings.h"
+#include "TextureManager.h"
+#include "TextureCube.h"
+#include "Plane.h"
+#include "Camera.h"
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+//STB
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 
-int SCREEN_WIDTH;
-int SCREEN_HEIGHT;
+//size of window
+const int WIDTH = 800;
+const int HEIGHT = 600;
 
-int TARGET_FPS = 60;
+//declaring 2 methods - defining methods
+void init();
+void display();
+void initGameObjects();
+void cleanUp();
+void timer(int);
 
+TextureManager* textureManager;
+
+
+GameObject* gameobject;
+SphereGameObject* sphere;
+TextureCube* textureCube;
+Plane* plane;
 Camera* camera;
-Cube* cube;
 
-float t;
-
-void display()
+//main method
+int main(int argc, char* argv[])
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glutInit(&argc, argv);
 
-	cube->OnUpdate();
+	//display red, green , blue, pixels
+	//glut double = double buffering = gonna use double buffering with window
+	//glut depth = depth testing, if something is close to camera it wont cut off - enabling depth testing
+	glutInitDisplayMode(GL_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-	cube->transform->scale = new Vector3(5, 5, 5);
+	//sizes of window - to pop up in middle of screen (/2)  
+	int windowX = (int)(glutGet(GLUT_SCREEN_WIDTH) - WIDTH) / 2;
+	int windowY = (int)(glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) / 2;
 
-	cube->transform->rotation = new Vector3(30, t, 0);
+	//take 2 variables and set windows to position
+	glutInitWindowPosition(windowX, windowY);
 
-	t += 1;
+	//setting windows size
+	glutInitWindowSize(WIDTH, HEIGHT);
 
-	glutSwapBuffers();
+	//creating window
+	glutCreateWindow("Top Deck Chess");
+
+	//display function on the screen
+	glutDisplayFunc(display);
+	glutTimerFunc(0, timer, 0);
+
+	init();
+
+	glutMainLoop();
+	cleanUp();
+
+	return 0;
+
 }
 
 void init()
 {
-	camera = new Camera(70, WINDOW_WIDTH, WINDOW_HEIGHT, 0.1F, 1000.0F);
-	std::cout << "TARGET FPS : " << TARGET_FPS << std::endl;
-	cube = new Cube();
-	cube->OnAwake();
-	cube->OnStart();
+	camera = new Camera(100.0F, HEIGHT, WIDTH, 1.0, 1000.0F);
+
+	camera->LookAt(vec3(0, 0, 15), vec3(0, 0, 0));
+
+	initGameObjects();
 }
 
-void freeMemory()
+
+void initGameObjects()
 {
+	textureManager = new TextureManager();
+
+	gameobject = new GameObject();
+	gameobject->setPosition(1, 0, 0);
+
+	sphere = new SphereGameObject();
+	sphere->setPosition(-1, 0, 0);
+
+	textureCube = new TextureCube();
+
+	plane = new Plane();
+}
+
+void cleanUp()
+{
+	delete textureManager;
+	delete gameobject;
+	delete sphere;
+	delete textureCube;
+	delete plane;
 	delete camera;
-	delete cube;
+}
+
+void display()
+{
+	glPushMatrix();
+	{
+		//glRotatef(45, 1, 1, 0);
+		textureManager->useTexture("gold");
+		textureCube->draw();
+
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	{
+		//glRotatef(45, 1, 1, 0);
+		glTranslatef(3, 0, 0);
+		textureManager->useTexture("brick");
+		textureCube->draw();
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	{
+		//glRotatef(45, 1, 1, 0);
+		glTranslatef(-3, 0, 0);
+		textureManager->useTexture("dirt");
+		textureCube->draw();
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	{
+		//glRotatef(45, 1, 1, 0);
+		glTranslatef(-6, 0, 0);
+		textureManager->useTexture("ice");
+		textureCube->draw();
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	{
+		//setupSecondCamera();
+		//glRotatef(45, 1, 1, 0);
+		glTranslatef(-9, 0, 0);
+		textureManager->useTexture("Heightmap");
+		plane->draw();
+	}
+	glPopMatrix();
+
+
+	camera->LateUpdate();
 }
 
 void timer(int)
 {
 	glutPostRedisplay();
-	glutTimerFunc(1000 / TARGET_FPS, timer, 0);
-}
-
-int main(int argc, char* argv[])
-{
-	#pragma region INIT_GLUT
-	
-	//Initialise GLUT and display mode.
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-
-	#pragma endregion
-
-	#pragma region WINDOW
-
-	//Initialise Window and place it in the centre of the screen.
-	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	SCREEN_WIDTH = glutGet(GLUT_SCREEN_WIDTH);
-	SCREEN_HEIGHT = glutGet(GLUT_SCREEN_HEIGHT);
-	glutInitWindowPosition
-	(
-		(SCREEN_WIDTH - WINDOW_WIDTH) / 2,
-		(SCREEN_HEIGHT - WINDOW_HEIGHT) / 2
-	);
-
-	#pragma endregion
-		
-	#pragma region OTHER_INIT
-
-	//Create the window and run other initialisations.
-	glutCreateWindow("TopDeck");
-	init();
-	glutDisplayFunc(display);
-	glutTimerFunc(0, timer, 0);
-	
-	glutMainLoop();
-
-	#pragma endregion
-
+	glutTimerFunc(1000 / 60, timer, 0);
 }
