@@ -14,6 +14,11 @@ void GameObject::setRotation(vec3 rotation)
 	this->rotation = rotation;
 }
 
+void GameObject::SetScale(vec3 scale)
+{
+	this->scale = scale;
+}
+
 vec3 GameObject::getPosition()
 {
 	return position;
@@ -41,6 +46,8 @@ void GameObject::draw()
 		glRotatef(rotation.x, 1, 0, 0);
 		glRotatef(rotation.y, 0, 1, 0);
 		glRotatef(rotation.z, 0, 0, 1);
+
+		glScalef(scale.x, scale.y, scale.z);
 
 		drawGeometry();
 	

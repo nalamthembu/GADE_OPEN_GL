@@ -6,6 +6,8 @@
 #include "components/Terrain.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+#include "components/Plane.h"
+#include "components/Chessboard.h"
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -17,9 +19,9 @@ void cleanUp();
 void timer(int);
 
 TextureManager* textureManager;
+Chessboard* chessboard;
 Camera* camera;
 
-//main method
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
@@ -48,9 +50,9 @@ int main(int argc, char* argv[])
 
 void init()
 {
-	camera = new Camera(100.0F, HEIGHT, WIDTH, 1.0, 1000.0F);
+	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
 
-	camera->LookAt(vec3(0, 0, 5), vec3(-3,0,0));
+	camera->LookAt(vec3(0,10,10), vec3(0,0,0));
 
 	float c = 0.25F;
 
@@ -63,12 +65,15 @@ void init()
 void initGameObjects()
 {
 	textureManager = new TextureManager();
+	chessboard = new Chessboard(10, 10);
+
 }
 
 void cleanUp()
 {
 	delete textureManager;
 	delete camera;
+	delete chessboard;
 }
 
 float t;
@@ -78,6 +83,8 @@ void display()
 	camera->Update();
 
 	//What to render.
+
+	chessboard->Update(textureManager);
 
 	camera->LateUpdate();
 }

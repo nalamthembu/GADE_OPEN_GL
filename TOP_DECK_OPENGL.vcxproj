@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="components\Chessboard.cpp" />
     <ClCompile Include="components\GameObject.cpp" />
     <ClCompile Include="components\Settings.cpp" />
     <ClCompile Include="components\Terrain.cpp" />
@@ -29,8 +30,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\Camera.h" />
+    <ClInclude Include="components\Chessboard.h" />
     <ClInclude Include="components\GameObject.h" />
     <ClInclude Include="components\Pixel.h" />
+    <ClInclude Include="components\Plane.h" />
     <ClInclude Include="components\Settings.h" />
     <ClInclude Include="components\Terrain.h" />
     <ClInclude Include="components\Texture.h" />
