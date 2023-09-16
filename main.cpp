@@ -50,14 +50,22 @@ int main(int argc, char* argv[])
 
 void init()
 {
+	//Create camera
 	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
 
-	camera->LookAt(vec3(0,10,10), vec3(0,0,0));
+	//Where the camera is in 3D space. (world)
+	vec3 cameraPosition = vec3(0, 10, -8);
+
+	//The target that the camera is looking at.
+	vec3 cameraTarget = vec3(0, 0, 0);
+
+	camera->LookAt(cameraPosition, cameraTarget);
 
 	float c = 0.25F;
 
 	camera->SetClearColour(vec4(c, c, c, 1));
 
+	//Creation of gameObjects.
 	initGameObjects();
 }
 
@@ -65,12 +73,12 @@ void init()
 void initGameObjects()
 {
 	textureManager = new TextureManager();
-	chessboard = new Chessboard(10, 10);
-
+	chessboard = new Chessboard(8, 8, 0.25F, 1.5F);
 }
 
 void cleanUp()
 {
+	//Garbage Collection.
 	delete textureManager;
 	delete camera;
 	delete chessboard;
@@ -82,9 +90,13 @@ void display()
 {
 	camera->Update();
 
-	//What to render.
+	#pragma region RENDER_OBJECTS
 
 	chessboard->Update(textureManager);
+
+	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
+
+#pragma endregion
 
 	camera->LateUpdate();
 }
