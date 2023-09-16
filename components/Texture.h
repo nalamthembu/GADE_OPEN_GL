@@ -1,5 +1,6 @@
 #pragma once
 #include "Pixel.h"
+#include "stb/stb_image.h"
 
 class Texture
 {

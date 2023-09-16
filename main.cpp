@@ -1,13 +1,14 @@
 #include <iostream>
-#include <GL/freeglut.h>
+#include "GL/glew.h"
+#include "GL/freeglut.h"
+#include "components/Plane.h"
 #include "components/Camera.h"
-#include "components/Settings.h"
-#include "components/TextureManager.h"
 #include "components/Terrain.h"
+#include "components/Settings.h"
+#include "components/Chessboard.h"
+#include "components/TextureManager.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
-#include "components/Plane.h"
-#include "components/Chessboard.h"
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -21,6 +22,7 @@ void timer(int);
 TextureManager* textureManager;
 Chessboard* chessboard;
 Camera* camera;
+Terrain* terrain;
 
 int main(int argc, char* argv[])
 {
@@ -74,6 +76,7 @@ void initGameObjects()
 {
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8, 0.25F, 1.5F);
+	terrain = new Terrain("Textures/iceland_heightmap.png");
 }
 
 void cleanUp()
@@ -82,6 +85,7 @@ void cleanUp()
 	delete textureManager;
 	delete camera;
 	delete chessboard;
+	delete terrain;
 }
 
 float t;

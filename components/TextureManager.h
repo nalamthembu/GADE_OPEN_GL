@@ -2,6 +2,8 @@
 #include <map>
 #include <string>
 #include "Texture.h"
+#include "stb/stb_image.h"
+
 
 using namespace std;
 
