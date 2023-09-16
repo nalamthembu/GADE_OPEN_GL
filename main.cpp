@@ -101,9 +101,9 @@ void display()
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
-#pragma endregion
-
 	camera->LateUpdate();
+
+#pragma endregion
 }
 
 void timer(int)
@@ -112,31 +112,30 @@ void timer(int)
 	glutTimerFunc(1000 / 60, timer, 0);
 }
 
-void CameraCycle() 
+void CameraCycle(vec3 camPosition)
 {
-	//Where the camera is in 3D space. (world)
-	vec3 cameraPosition = vec3(0, 10, -10);
+	//Create a new camera
+	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
 
-	//The target that the camera is looking at. (Looking at the chessboard)
+	//Where the camera is in 3D space. (world)
+	vec3 cameraPosition = camPosition;
+
+	//The target that the camera is looking at.
 	vec3 cameraTarget = vec3(0, 0, 0);
 
+
 	camera->LookAt(cameraPosition, cameraTarget);
-
-	float c = 0.25F;
-
-	camera->SetClearColour(vec4(c, c, c, 1));
-
-	display();
-
 }
 
 void specialKeyInput(int key, int x, int y)
 {
 
-	if (key == GLUT_KEY_UP) std::cout << "UpKey" << std::endl;
-	if (key == GLUT_KEY_DOWN) std::cout << "DownKey" << std::endl;
-	if (key == GLUT_KEY_LEFT) std::cout << "LeftKey" << std::endl;
-	if (key == GLUT_KEY_RIGHT) std::cout << "RightKey" << std::endl;
+	if (key == GLUT_KEY_UP) CameraCycle(vec3(0, 10, -8));// std::cout << "UpKey" << std::endl;
+	if (key == GLUT_KEY_DOWN) CameraCycle(vec3(10, 10, -10)); //std::cout << "DownKey" << std::endl;
+	if (key == GLUT_KEY_LEFT) CameraCycle(vec3(-10, 5, -10));  //std::cout << "LeftKey" << std::endl;
+	if (key == GLUT_KEY_RIGHT) CameraCycle(vec3(5, 1, -10)); //std::cout << "RightKey" << std::endl;
+
+	camera->Update();
 
 	glutPostRedisplay();
 }

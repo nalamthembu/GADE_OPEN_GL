@@ -1,3 +1,3 @@
 #include "Settings.h"
 
-bool Settings::debug = true;
+bool Settings::debug = false;
