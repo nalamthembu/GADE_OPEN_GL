@@ -18,11 +18,12 @@ void display();
 void initGameObjects();
 void cleanUp();
 void timer(int);
+void CameraCycle();
+void specialKeyInput(int key, int x, int y);
 
 TextureManager* textureManager;
 Chessboard* chessboard;
 Camera* camera;
-Terrain* terrain;
 
 int main(int argc, char* argv[])
 {
@@ -38,6 +39,7 @@ int main(int argc, char* argv[])
 	glutCreateWindow("OpenGL Chess");
 
 	glutDisplayFunc(display);
+	glutSpecialFunc(specialKeyInput);
 	glutTimerFunc(0, timer, 0);
 
 	init();
@@ -60,6 +62,7 @@ void init()
 
 	//The target that the camera is looking at.
 	vec3 cameraTarget = vec3(0, 0, 0);
+	
 
 	camera->LookAt(cameraPosition, cameraTarget);
 
@@ -76,7 +79,6 @@ void initGameObjects()
 {
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8, 0.25F, 1.5F);
-	terrain = new Terrain("Textures/iceland_heightmap.png");
 }
 
 void cleanUp()
@@ -85,7 +87,6 @@ void cleanUp()
 	delete textureManager;
 	delete camera;
 	delete chessboard;
-	delete terrain;
 }
 
 float t;
@@ -109,4 +110,33 @@ void timer(int)
 {
 	glutPostRedisplay();
 	glutTimerFunc(1000 / 60, timer, 0);
+}
+
+void CameraCycle() 
+{
+	//Where the camera is in 3D space. (world)
+	vec3 cameraPosition = vec3(0, 10, -10);
+
+	//The target that the camera is looking at. (Looking at the chessboard)
+	vec3 cameraTarget = vec3(0, 0, 0);
+
+	camera->LookAt(cameraPosition, cameraTarget);
+
+	float c = 0.25F;
+
+	camera->SetClearColour(vec4(c, c, c, 1));
+
+	display();
+
+}
+
+void specialKeyInput(int key, int x, int y)
+{
+
+	if (key == GLUT_KEY_UP) std::cout << "UpKey" << std::endl;
+	if (key == GLUT_KEY_DOWN) std::cout << "DownKey" << std::endl;
+	if (key == GLUT_KEY_LEFT) std::cout << "LeftKey" << std::endl;
+	if (key == GLUT_KEY_RIGHT) std::cout << "RightKey" << std::endl;
+
+	glutPostRedisplay();
 }
