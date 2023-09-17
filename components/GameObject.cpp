@@ -1,7 +1,6 @@
 #include "GameObject.h"
 #include <GL/freeglut.h>
 #include <iostream>
-#include "Settings.h"
 #include <math.h>
 
 void GameObject::setPosition(vec3 position)
@@ -51,10 +50,7 @@ void GameObject::draw()
 
 		drawGeometry();
 	
-		if (Settings::debug)
-		{
-			drawOrigin();
-		}
+		//drawOrigin();
 	
 	}
 	//reverts back to original state

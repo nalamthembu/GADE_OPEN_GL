@@ -1,25 +1,36 @@
 #pragma once
 #include <vector>
 #include "GL/glew.h"
+#include "glm/glm.hpp"
 #include "stb/stb_image.h"
-
-
+#include "Texture.h"
 using namespace glm;
 
 class Terrain
 {
 	int width, height, nChannels;
 	unsigned char* data;
-
+    std::vector<glm::vec3> vertices;
+    std::vector<int> triangles;
+    glm::vec3 position = vec3(0,0,0);
+    std::vector<vec3> colours;
+    
 public:
     
-	Terrain(const char * path)
-	{
-		data = stbi_load(path, &width, &height, &nChannels, 0);
+    void SetPosition(glm::vec3 pos)
+    {
+        this->position = pos;
+    }
+
+    Terrain(const char* path)
+    {
+        data = stbi_load(path, &width, &height, &nChannels, 0);
+
+        position = vec3(0, 0, 0);
 
         std::cout << "Terrain Width : " << width << "\nTerrain Height : " << height << std::endl;
 
-        std::vector<float> vertices;
+        //Vertex Generation
         float yScale = 64.0f / 256.0f, yShift = 16.0f;  // apply a scale+shift to the height data
         for (unsigned int i = 0; i < height; i++)
         {
@@ -31,28 +42,39 @@ public:
                 unsigned char y = texel[0];
 
                 // vertex
-                vertices.push_back(-height / 2.0f + i);        // v.x
-                vertices.push_back((int)y * yScale - yShift); // v.y
-                vertices.push_back(-width / 2.0f + j);        // v.z
+                float x = (-height / 2.0f + i);        // v.x
+                float _y = ((int)y * yScale - yShift); // v.y
+                float z = (-width / 2.0f + j);        // v.z
+
+                vec3 vert = vec3(x, _y, z);
+
+                vertices.push_back(vert);
+
+                colours.push_back(vec3(0,vert.y * 25,0));
             }
         }
 
         stbi_image_free(data);
+    }
 
-        // index generation
-        std::vector<unsigned int> indices;
-        for (unsigned int i = 0; i < height - 1; i++)       // for each row a.k.a. each strip
-        {
-            for (unsigned int j = 0; j < width; j++)      // for each column
+    void draw()
+    {
+        glPointSize(2);
+
+        glBegin(GL_POINTS); {
+
+            for (int i = 0; i < vertices.size(); i++)
             {
-                for (unsigned int k = 0; k < 2; k++)      // for each side of the strip
-                {
-                    indices.push_back(j + width * (i + k));
-                }
+                float x = vertices.at(i).x + position.x;
+                float y = vertices.at(i).y + position.y;
+                float z = vertices.at(i).z + position.z;
+
+                float c = colours.at(i).y / 255;
+
+                glColor3f(c, c, c);
+                glVertex3f(x, y, z);
             }
         }
-
-        const unsigned int NUM_STRIPS = height - 1;
-        const unsigned int NUM_VERTS_PER_STRIP = width * 2;
-	}
+        glEnd();
+    }
 };

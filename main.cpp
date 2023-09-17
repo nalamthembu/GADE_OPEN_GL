@@ -1,10 +1,9 @@
 #include <iostream>
 #include "GL/glew.h"
 #include "GL/freeglut.h"
-#include "components/Plane.h"
+#include "components/Terrain.h"
 #include "components/Camera.h"
 #include "components/Terrain.h"
-#include "components/Settings.h"
 #include "components/Chessboard.h"
 #include "components/TextureManager.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -23,6 +22,7 @@ void specialKeyInput(int key, int x, int y);
 
 TextureManager* textureManager;
 Chessboard* chessboard;
+Terrain* terrain;
 Camera* camera;
 
 int main(int argc, char* argv[])
@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
 
 void init()
 {
+
 	//Create camera
 	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
 
@@ -68,7 +69,7 @@ void init()
 
 	float c = 0.25F;
 
-	camera->SetClearColour(vec4(c, c, c, 1));
+	camera->SetClearColour(vec4(.25, .25, .25, 1));
 
 	//Creation of gameObjects.
 	initGameObjects();
@@ -79,6 +80,8 @@ void initGameObjects()
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8);
 	chessboard->SetPosition(vec2(-chessboard->GetSize().x * 0.5F, -chessboard->GetSize().y/ 2.7F));
+	terrain = new Terrain("Textures/height_map_top_deck.png");
+	terrain->SetPosition(vec3(0, -40, 0));
 }
 
 void cleanUp()
@@ -87,7 +90,10 @@ void cleanUp()
 	delete textureManager;
 	delete camera;
 	delete chessboard;
+	delete terrain;
 }
+
+float t; 
 
 void display()
 {
@@ -95,7 +101,9 @@ void display()
 
 	#pragma region RENDER_OBJECTS
 
-	chessboard->Update(textureManager);
+    chessboard->Update(textureManager);
+
+	terrain->draw();
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
@@ -129,7 +137,7 @@ void specialKeyInput(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_UP:
-		CameraCycle(vec3(0, 10, -8));
+		CameraCycle(vec3(0, 400, -600));
 		std::cout << "UpKey" << std::endl;
 		break;
 

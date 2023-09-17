@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="components\Chessboard.cpp" />
     <ClCompile Include="components\GameObject.cpp" />
-    <ClCompile Include="components\Settings.cpp" />
     <ClCompile Include="components\Texture.cpp" />
     <ClCompile Include="components\TextureCube.cpp" />
     <ClCompile Include="components\TextureManager.cpp" />
@@ -34,7 +33,6 @@
     <ClInclude Include="components\GameObject.h" />
     <ClInclude Include="components\Pixel.h" />
     <ClInclude Include="components\Plane.h" />
-    <ClInclude Include="components\Settings.h" />
     <ClInclude Include="components\Terrain.h" />
     <ClInclude Include="components\Texture.h" />
     <ClInclude Include="components\TextureCube.h" />
@@ -98,12 +96,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include\GL;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\KHR;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\freeglut_x86;$(SolutionDir)lib\glew_x86;$(SolutionDir)lib\glfw3;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
