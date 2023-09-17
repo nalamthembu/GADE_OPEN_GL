@@ -74,11 +74,10 @@ void init()
 	initGameObjects();
 }
 
-
 void initGameObjects()
 {
 	textureManager = new TextureManager();
-	chessboard = new Chessboard(8, 8, 0.25F, 1.5F);
+	chessboard = new Chessboard(8, 8);
 	chessboard->SetPosition(vec2(-chessboard->GetSize().x * 0.5F, -chessboard->GetSize().y/ 2.7F));
 }
 
@@ -90,8 +89,6 @@ void cleanUp()
 	delete chessboard;
 }
 
-float t;
-
 void display()
 {
 	camera->Update();
@@ -100,15 +97,11 @@ void display()
 
 	chessboard->Update(textureManager);
 
-	//CENTRE OF THE WORLD (DEBUGGING)
-	//glColor3f(1, 0, 0);
-	//glutSolidCube(1);
-
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
-	camera->LateUpdate();
+	#pragma endregion
 
-#pragma endregion
+	camera->LateUpdate();
 }
 
 void timer(int)
@@ -128,17 +121,34 @@ void CameraCycle(vec3 camPosition)
 	//The target that the camera is looking at.
 	vec3 cameraTarget = vec3(0, 0, 0);
 
-
 	camera->LookAt(cameraPosition, cameraTarget);
 }
 
 void specialKeyInput(int key, int x, int y)
 {
+	switch (key)
+	{
+	case GLUT_KEY_UP:
+		CameraCycle(vec3(0, 10, -8));
+		std::cout << "UpKey" << std::endl;
+		break;
 
-	if (key == GLUT_KEY_UP) CameraCycle(vec3(0, 10, -8));// std::cout << "UpKey" << std::endl;
-	if (key == GLUT_KEY_DOWN) CameraCycle(vec3(0, 50, 10)); //std::cout << "DownKey" << std::endl;
-	if (key == GLUT_KEY_LEFT) CameraCycle(vec3(-10, 5, -10));  //std::cout << "LeftKey" << std::endl;
-	if (key == GLUT_KEY_RIGHT) CameraCycle(vec3(5, 1, -10)); //std::cout << "RightKey" << std::endl;
+	case GLUT_KEY_DOWN:
+		CameraCycle(vec3(0, 50, 10));
+		std::cout << "DownKey" << std::endl;
+		break;
+
+	case GLUT_KEY_LEFT:
+		CameraCycle(vec3(-10, 5, -10));
+		std::cout << "LeftKey" << std::endl;
+		break;
+
+	case GLUT_KEY_RIGHT:
+		CameraCycle(vec3(5, 1, -10));
+		std::cout << "RightKey" << std::endl;
+		break;
+
+	}
 
 	camera->Update();
 

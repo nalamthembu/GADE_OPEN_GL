@@ -12,7 +12,7 @@ TextureManager::TextureManager()
 	textures.insert({ "dirt", new Texture("Textures/dirt.png") });
 	textures.insert({ "gold", new Texture("Textures/gold_block.png") });
 	textures.insert({ "ice", new Texture("Textures/frosted_ice.png") });
-	textures.insert({ "Heightmap", new Texture("Textures/Heightmap.png") });
+	textures.insert({ "Heightmap", new Texture("Textures/height_map_top_deck.png") });
 	textures.insert({ "black_block", new Texture("Textures/black_block.png") });
 	textures.insert({ "white_block", new Texture("Textures/white_block.png") });
 }
