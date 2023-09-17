@@ -18,7 +18,7 @@ void display();
 void initGameObjects();
 void cleanUp();
 void timer(int);
-void CameraCycle();
+void CameraCycle(vec3 camPosition);
 void specialKeyInput(int key, int x, int y);
 
 TextureManager* textureManager;
@@ -79,6 +79,7 @@ void initGameObjects()
 {
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8, 0.25F, 1.5F);
+	chessboard->SetPosition(vec2(-chessboard->GetSize().x * 0.5F, -chessboard->GetSize().y/ 2.7F));
 }
 
 void cleanUp()
@@ -98,6 +99,10 @@ void display()
 	#pragma region RENDER_OBJECTS
 
 	chessboard->Update(textureManager);
+
+	//CENTRE OF THE WORLD (DEBUGGING)
+	//glColor3f(1, 0, 0);
+	//glutSolidCube(1);
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
@@ -131,7 +136,7 @@ void specialKeyInput(int key, int x, int y)
 {
 
 	if (key == GLUT_KEY_UP) CameraCycle(vec3(0, 10, -8));// std::cout << "UpKey" << std::endl;
-	if (key == GLUT_KEY_DOWN) CameraCycle(vec3(10, 10, -10)); //std::cout << "DownKey" << std::endl;
+	if (key == GLUT_KEY_DOWN) CameraCycle(vec3(0, 50, 10)); //std::cout << "DownKey" << std::endl;
 	if (key == GLUT_KEY_LEFT) CameraCycle(vec3(-10, 5, -10));  //std::cout << "LeftKey" << std::endl;
 	if (key == GLUT_KEY_RIGHT) CameraCycle(vec3(5, 1, -10)); //std::cout << "RightKey" << std::endl;
 

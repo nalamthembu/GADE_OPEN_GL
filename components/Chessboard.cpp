@@ -13,7 +13,7 @@ Chessboard::Chessboard(int sizeX, int sizeY)
 		{
 			this->pCubes[x][y] = new TextureCube();
 			this->pCubes[x][y]->SetScale(vec3(1, 0.15, 1));
-			this->pCubes[x][y]->setPosition(vec3(x, 0, y));
+			this->pCubes[x][y]->setPosition(vec3(x * 0.5F, 0, y * 0.5F));
 		}
 	}
 }
@@ -44,6 +44,11 @@ void Chessboard::SetPosition(vec2 position)
 vec2 Chessboard::GetPosition()
 {
 	return this->position;
+}
+
+vec2 Chessboard::GetSize()
+{
+	return vec2(sizeX, sizeY);
 }
 
 Chessboard::~Chessboard()

@@ -16,6 +16,7 @@ public:
 	Chessboard(int sizeX, int sizeY, float minRan, float maxRan);
 	void SetPosition(vec2 position);
 	vec2 GetPosition();
+	vec2 GetSize();
 	~Chessboard();
 	void Update(TextureManager* texManager);
 };
