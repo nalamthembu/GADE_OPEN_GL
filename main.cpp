@@ -23,8 +23,8 @@ void specialKeyInput(int key, int x, int y);
 vec3 camPositions[3]
 {
 	vec3(0, 400, -600),
-	vec3(50, 50, 5),
-	vec3(0, 50, 5),
+	vec3(0, 10, -8),
+	vec3(-10, 10, -8),
 };
 
 
@@ -64,7 +64,6 @@ int main(int argc, char* argv[])
 
 void init()
 {
-
 	//Create camera
 	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
 
@@ -136,20 +135,19 @@ void display()
 
 	#pragma region RENDER_OBJECTS
 
+	//RENDER THE BOARDERS
 	for (int x = 0; x < 10; x++)
 	{
-		for (int y = 0; y < 10; y++) //Increase the size of the board to 10x10 to include the border
+		for (int y = 0; y < 10; y++)
 		{
 			textureManager->useTexture("gold");
 			border[x][y]->draw();
-
-			chessboard->Update(textureManager);
 		}
 	}
 
-	terrain->Update();
+	chessboard->Update(textureManager);
 
-    
+	terrain->Update();
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
