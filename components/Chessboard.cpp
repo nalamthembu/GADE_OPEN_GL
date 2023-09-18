@@ -1,6 +1,7 @@
 #include "Chessboard.h"
 #include "TextureCube.h"
 #include "TextureManager.h"
+#include <random>
 
 Chessboard::Chessboard(int sizeX, int sizeY)
 {
@@ -13,7 +14,6 @@ Chessboard::Chessboard(int sizeX, int sizeY)
 		{
 			this->pCubes[x][y] = new TextureCube();
 			this->pCubes[x][y]->SetScale(vec3(1, 0.15, 1));
-			this->pCubes[x][y]->setPosition(vec3(x * 0.5F, 0, y * 0.5F));
 		}
 	}
 }
@@ -27,10 +27,10 @@ Chessboard::Chessboard(int sizeX, int sizeY, float minRan, float maxRan)
 	{
 		for (int y = 0; y < this->sizeY; y++)
 		{
-			this->randomY = (rand() % (int)maxRan) + minRan;
+			this->randomY = GetRandomNumber(minRan, maxRan);
 
 			this->pCubes[x][y] = new TextureCube();
-			this->pCubes[x][y]->SetScale(vec3(1, randomY, 1));
+			this->pCubes[x][y]->SetScale(vec3(1, 0, 1));
 			this->pCubes[x][y]->setPosition(vec3(x, 0, y));
 		}
 	}
@@ -64,6 +64,15 @@ Chessboard::~Chessboard()
 	delete pCubes;
 }
 
+float Chessboard::GetRandomNumber(float min, float max)
+{
+	std::random_device randomDev;
+	std::uniform_int_distribution<int> unifInt_Dis(min, max);
+
+	return unifInt_Dis(randomDev);
+}
+
+
 void Chessboard::Update(TextureManager* texManager)
 {
 	for (int x = 0; x < this->sizeX; x++)
@@ -75,7 +84,11 @@ void Chessboard::Update(TextureManager* texManager)
 			else
 				texManager->useTexture("white_block");
 
-			pCubes[x][y]->setPosition(vec3(x + position.x, randomY, y + position.y));
+			float xPos = x - 3.5;
+			float yPos = 0.1;
+			float zPos = y - 3.5;
+
+			pCubes[x][y]->setPosition(vec3(xPos, yPos, zPos));
 
 			pCubes[x][y]->draw();
 		}

@@ -20,10 +20,20 @@ void timer(int);
 void CameraCycle(vec3 camPosition);
 void specialKeyInput(int key, int x, int y);
 
+vec3 camPositions[3]
+{
+	vec3(0, 400, -600),
+	vec3(50, 50, 5),
+	vec3(0, 50, 5),
+};
+
+
 TextureManager* textureManager;
 Chessboard* chessboard;
 Terrain* terrain;
+TextureCube* border[10][10];
 Camera* camera;
+
 
 int main(int argc, char* argv[])
 {
@@ -69,7 +79,7 @@ void init()
 
 	float c = 0.25F;
 
-	camera->SetClearColour(vec4(.25, .25, .25, 1));
+	camera->SetClearColour(vec4(0, 208.0F/255, 1, 1));
 
 	//Creation of gameObjects.
 	initGameObjects();
@@ -78,10 +88,35 @@ void init()
 void initGameObjects()
 {
 	textureManager = new TextureManager();
-	chessboard = new Chessboard(8, 8);
-	chessboard->SetPosition(vec2(-chessboard->GetSize().x * 0.5F, -chessboard->GetSize().y/ 2.7F));
+	chessboard = new Chessboard(8, 8, 0.5F, 1);
+	chessboard->SetPosition(vec2(0,0));
 	terrain = new Terrain("Textures/height_map_top_deck.png");
 	terrain->SetPosition(vec3(0, -40, 0));
+	
+	for (int x = 0; x < 10; x++) 
+	{
+
+		for (int y = 0; y < 10; y++)
+		{
+			//Position & centre the Border
+			float xPos = x - 4.5;
+			float yPos = -0.5;
+			float zPos = y - 4.5;
+
+			if (x < 1  || x > 8 ||  y < 1 || y > 8)
+			{
+				//Creating a border cube
+				border[x][y] = new TextureCube();
+				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
+				border[x][y]->SetScale(vec3(1., 0.25, 1));
+			}
+			else
+			{
+				border[x][y] = new TextureCube();
+				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
+			}
+		}
+	}
 }
 
 void cleanUp()
@@ -101,9 +136,20 @@ void display()
 
 	#pragma region RENDER_OBJECTS
 
-    chessboard->Update(textureManager);
+	for (int x = 0; x < 10; x++)
+	{
+		for (int y = 0; y < 10; y++) //Increase the size of the board to 10x10 to include the border
+		{
+			textureManager->useTexture("gold");
+			border[x][y]->draw();
 
-	terrain->draw();
+			chessboard->Update(textureManager);
+		}
+	}
+
+	terrain->Update();
+
+    
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
@@ -132,31 +178,32 @@ void CameraCycle(vec3 camPosition)
 	camera->LookAt(cameraPosition, cameraTarget);
 }
 
+int currentPos;
+
 void specialKeyInput(int key, int x, int y)
 {
 	switch (key)
 	{
-	case GLUT_KEY_UP:
-		CameraCycle(vec3(0, 400, -600));
-		std::cout << "UpKey" << std::endl;
-		break;
-
-	case GLUT_KEY_DOWN:
-		CameraCycle(vec3(0, 50, 10));
-		std::cout << "DownKey" << std::endl;
-		break;
-
 	case GLUT_KEY_LEFT:
-		CameraCycle(vec3(-10, 5, -10));
-		std::cout << "LeftKey" << std::endl;
+		currentPos--;
 		break;
 
 	case GLUT_KEY_RIGHT:
-		CameraCycle(vec3(5, 1, -10));
-		std::cout << "RightKey" << std::endl;
+		currentPos++;
 		break;
 
 	}
+
+	if (currentPos > 3)
+	{
+		currentPos = 0;
+	}
+	else if (currentPos < 0)
+	{
+		currentPos = 3;
+	}
+
+	CameraCycle(camPositions[currentPos]);
 
 	camera->Update();
 

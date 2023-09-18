@@ -57,7 +57,7 @@ public:
         stbi_image_free(data);
     }
 
-    void draw()
+    void Update()
     {
         glPointSize(2);
 
@@ -72,6 +72,20 @@ public:
                 float c = colours.at(i).y / 255;
 
                 glColor3f(c, c, c);
+                glVertex3f(x, y, z);
+            }
+        }
+        glEnd();
+
+        glBegin(GL_POINTS); {
+
+            for (int i = 0; i < vertices.size(); i++)
+            {
+                float x = vertices.at(i).x + position.x;
+                float y = vertices.at(i).y + position.y;
+                float z = vertices.at(i).z + position.z;
+
+                glColor3f(1, 0, 0);
                 glVertex3f(x, y, z);
             }
         }

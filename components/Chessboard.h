@@ -18,5 +18,6 @@ public:
 	vec2 GetPosition();
 	vec2 GetSize();
 	~Chessboard();
+	float GetRandomNumber(float min, float max);
 	void Update(TextureManager* texManager);
 };
