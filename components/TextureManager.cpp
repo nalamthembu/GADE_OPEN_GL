@@ -12,7 +12,7 @@ TextureManager::TextureManager()
 	textures.insert({ "dirt", new Texture("Textures/dirt.png") });
 	textures.insert({ "gold", new Texture("Textures/gold_block.png") });
 	textures.insert({ "ice", new Texture("Textures/frosted_ice.png") });
-	textures.insert({ "Heightmap", new Texture("Textures/height_map_top_deck.png") });
+	textures.insert({ "Heightmap", new Texture("Textures/height_map_top_deck.png",3) });
 	textures.insert({ "black_block", new Texture("Textures/black_block.png") });
 	textures.insert({ "white_block", new Texture("Textures/white_block.png") });
 }
@@ -42,5 +42,11 @@ void TextureManager::useTexture(string textureName)
 
 Texture* TextureManager::getTexture(string textureName)
 {
+	if (!textures.count(textureName))
+	{
+		cout << "WARNING: Texture does not exist!" << endl;
+		return nullptr;
+	}
+
 	return textures[textureName];
 }

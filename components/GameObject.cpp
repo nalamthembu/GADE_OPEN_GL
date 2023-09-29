@@ -3,6 +3,17 @@
 #include <iostream>
 #include <math.h>
 
+void GameObject::GenerateDisplayList()
+{
+	this->displayListId = glGenLists(1);
+	glNewList(displayListId, GL_COMPILE);
+	{
+		drawGeometry();
+	}
+	glEndList();
+	displayListGenerated = true;
+}
+
 void GameObject::setPosition(vec3 position)
 {
 	this->position = position;
@@ -49,17 +60,14 @@ void GameObject::draw()
 		glScalef(scale.x, scale.y, scale.z);
 
 		drawGeometry();
-	
-		//drawOrigin();
-	
 	}
 	//reverts back to original state
-	glPopMatrix();
-	
+	glPopMatrix();	
 }
 
 void GameObject::drawGeometry()
 {
+
 }
 
 void GameObject::drawOrigin()

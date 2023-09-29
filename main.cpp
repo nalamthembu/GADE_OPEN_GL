@@ -1,4 +1,5 @@
 #include <iostream>
+#include "PlayerInput.h"
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 #include "components/Terrain.h"
@@ -6,8 +7,6 @@
 #include "components/Terrain.h"
 #include "components/Chessboard.h"
 #include "components/TextureManager.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -22,23 +21,23 @@ void specialKeyInput(int key, int x, int y);
 
 vec3 camPositions[3]
 {
-	vec3(0, 400, -600),
+	vec3(-100, 100, -20),
 	vec3(0, 10, -8),
 	vec3(-10, 10, -8),
 };
 
-
 TextureManager* textureManager;
 Chessboard* chessboard;
-Terrain* terrain;
 TextureCube* border[10][10];
+Terrain* terrain;
 Camera* camera;
+PlayerInput* input;
 
 
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GL_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
 	int windowX = (int)(glutGet(GLUT_SCREEN_WIDTH) - WIDTH) / 2;
 	int windowY = (int)(glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) / 2;
@@ -49,7 +48,6 @@ int main(int argc, char* argv[])
 	glutCreateWindow("OpenGL Chess");
 
 	glutDisplayFunc(display);
-	glutSpecialFunc(specialKeyInput);
 	glutTimerFunc(0, timer, 0);
 
 	init();
@@ -73,12 +71,15 @@ void init()
 	//The target that the camera is looking at.
 	vec3 cameraTarget = vec3(0, 0, 0);
 	
-
 	camera->LookAt(cameraPosition, cameraTarget);
 
 	float c = 0.25F;
 
 	camera->SetClearColour(vec4(0, 208.0F/255, 1, 1));
+
+	input = new PlayerInput();
+
+	glutSpecialFunc(specialKeyInput);
 
 	//Creation of gameObjects.
 	initGameObjects();
@@ -88,13 +89,12 @@ void initGameObjects()
 {
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8, 0.5F, 1);
-	chessboard->SetPosition(vec2(0,0));
-	terrain = new Terrain("Textures/height_map_top_deck.png");
-	terrain->SetPosition(vec3(0, -40, 0));
-	
+	chessboard->SetPosition(vec2(0, 0));
+	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 25);
+	terrain->GenerateDisplayList();
+
 	for (int x = 0; x < 10; x++) 
 	{
-
 		for (int y = 0; y < 10; y++)
 		{
 			//Position & centre the Border
@@ -125,6 +125,7 @@ void cleanUp()
 	delete camera;
 	delete chessboard;
 	delete terrain;
+	delete input;
 }
 
 float t; 
@@ -147,7 +148,7 @@ void display()
 
 	chessboard->Update(textureManager);
 
-	terrain->Update();
+	terrain->draw();
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
@@ -189,7 +190,6 @@ void specialKeyInput(int key, int x, int y)
 	case GLUT_KEY_RIGHT:
 		currentPos++;
 		break;
-
 	}
 
 	if (currentPos > 3)
