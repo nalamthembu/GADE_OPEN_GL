@@ -33,6 +33,8 @@ Terrain* terrain;
 Camera* camera;
 PlayerInput* input;
 
+//Chesspiece nameofboard[18 * 2]
+
 
 int main(int argc, char* argv[])
 {

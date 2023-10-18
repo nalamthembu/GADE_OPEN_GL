@@ -19,17 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bishop.cpp" />
+    <ClCompile Include="Chesspiece.cpp" />
     <ClCompile Include="components\Chessboard.cpp" />
     <ClCompile Include="components\GameObject.cpp" />
     <ClCompile Include="components\Terrain.cpp" />
     <ClCompile Include="components\Texture.cpp" />
     <ClCompile Include="components\TextureCube.cpp" />
     <ClCompile Include="components\TextureManager.cpp" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
+    <ClCompile Include="Queen.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="stb.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bishop.h" />
+    <ClInclude Include="Chesspiece.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="components\Camera.h" />
     <ClInclude Include="components\Chessboard.h" />
@@ -40,7 +49,12 @@
     <ClInclude Include="components\Texture.h" />
     <ClInclude Include="components\TextureCube.h" />
     <ClInclude Include="components\TextureManager.h" />
+    <ClInclude Include="King.h" />
+    <ClInclude Include="Knight.h" />
+    <ClInclude Include="Pawn.h" />
     <ClInclude Include="PlayerInput.h" />
+    <ClInclude Include="Queen.h" />
+    <ClInclude Include="Rook.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
