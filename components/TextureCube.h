@@ -6,4 +6,3 @@ class TextureCube : public GameObject
 	private:
 		void drawGeometry() override;
 };
-

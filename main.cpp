@@ -90,7 +90,7 @@ void initGameObjects()
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8, 0.5F, 1);
 	chessboard->SetPosition(vec2(0, 0));
-	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 25);
+	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 5);
 	terrain->GenerateDisplayList();
 
 	for (int x = 0; x < 10; x++) 
@@ -135,8 +135,14 @@ void display()
 	camera->Update();
 
 	#pragma region RENDER_OBJECTS
+	
+	//TEMPORARILY DISABLE TEXTURES
+	glDisable(GL_TEXTURE_2D);
+
+	terrain->draw();
 
 	//RENDER THE BOARDERS
+	
 	for (int x = 0; x < 10; x++)
 	{
 		for (int y = 0; y < 10; y++)
@@ -147,8 +153,6 @@ void display()
 	}
 
 	chessboard->Update(textureManager);
-
-	terrain->draw();
 
 	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
 
