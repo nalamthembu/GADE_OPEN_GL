@@ -1,18 +1,21 @@
 #pragma once
 #include "components/GameObject.h"
+#include "GL/freeglut.h"
+#include "PieceColour.h"
 
-class Chesspiece : public GameObject
+class Chesspiece
 {
-private:
-	PIECE_COLOUR colour;
+protected:
+	PieceColour colour;
+	virtual void draw();
+	vec3 position;
+	vec3 rotation;
+	vec3 scale;
 
-public: 
-	virtual void Animate();
-	Chesspiece(PIECE_COLOUR colour);
-};
-
-enum PIECE_COLOUR
-{
-	BLACK,
-	WHITE
+public:
+	 Chesspiece(PieceColour pieceColour);
+	virtual void update();
+	void SetPosition(vec3 position);
+	void SetRotation(vec3 rotation);
+	void SetScale(vec3 scale);
 };

@@ -1,71 +1,112 @@
-#pragma once
-#include "GL/freeglut.h"
-#include "glm/glm.hpp"
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-using namespace glm;
-
-class Camera
-{
+class Camera {
 public:
-	float fov = 60;
-	double height;
-	double width;
-	float nearZ;
-	float farZ;
+    Camera(int screenWidth, int screenHeight)
+        : position(glm::vec3(0.0f, 0.0f, 3.0f)),
+        front(glm::vec3(0.0f, 0.0f, -1.0f)),
+        up(glm::vec3(0.0f, 1.0f, 0.0f)),
+        yaw(-90.0f), pitch(0.0f), fov(70.0F) {
+        this->screenWidth = screenWidth;
+        this->screenHeight = screenHeight;
+        this->ScreenHeight = screenHeight;
+        this->ScreenWidth = screenWidth;
+    }
 
-	vec3 position = vec3(0,0,0);
-	vec3 rotation = vec3(0,0,0);
+    glm::mat4 GetViewMatrix() {
+        return glm::lookAt(position, position + front, up);
+    }
 
-	Camera(float fov, float height, float width, float nearZ, float farZ)
-	{
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+    glm::mat4 GetProjectionMatrix() {
+        //16.0F/9.0F -> 16:9 Aspect
+        return glm::perspective(glm::radians(fov), (float)screenWidth / (float)screenHeight, 0.01f, 1000.0F);
+    }
 
-		this->fov = fov;
-		this->width = width;
-		this->height = height;
-		this->nearZ = nearZ;
-		this->farZ = farZ;
+    void ProcessInput(unsigned char key, int x, int y) {
+        float cameraSpeed = 2.5f;
+        if (key == 'w')
+            position += cameraSpeed * front;
+        if (key == 's')
+            position -= cameraSpeed * front;
+        if (key == 'a')
+            position -= glm::normalize(glm::cross(front, up)) * cameraSpeed;
+        if (key == 'd')
+            position += glm::normalize(glm::cross(front, up)) * cameraSpeed;
+    }
 
-		gluPerspective(this->fov, this->width / this->height, this->nearZ, this->farZ);
-	}
+    void ProcessMouseMovement(int x, int y) {
+        if (firstMouse) {
+            lastX = x;
+            lastY = y;
+            firstMouse = false;
+        }
 
-	void SetPosition(vec3 pos)
-	{
-		glTranslatef(pos.x, pos.y, pos.z);
-	}
+        float xoffset = x - lastX;
+        float yoffset = lastY - y; // Reversed since y-coordinates range from bottom to top
+        lastX = x;
+        lastY = y;
 
-	void SetClearColour(vec4 colour)
-	{
-		glClearColor(colour.x, colour.y, colour.z, colour.w);
-	}
+        xoffset *= 0.05f;
+        yoffset *= 0.05f;
 
-	void SetRotation(vec3 rot)
-	{
-		glRotatef(rot.x, 1, 0, 0);
-		glRotatef(rot.y, 0, 1, 0);
-		glRotatef(rot.z, 0, 0, 1);
-	}
+        // Wrap-around mouse movement at window edges
+        int winWidth = glutGet(GLUT_WINDOW_WIDTH);
+        int winHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
-	void LookAt(vec3 pos, vec3 tar)
-	{
-		position = pos;
+        if (x < 0 || x >= winWidth) {
+            xoffset = -xoffset; // Invert the movement
+        }
+        if (y < 0 || y >= winHeight) {
+            yoffset = -yoffset; // Invert the movement
+        }
 
-		gluLookAt
-		(
-			position.x, position.y, position.z,
-			tar.x, tar.y, tar.z,
-			0.0, 1.0, 0.0
-		);
-	}
+        yaw += xoffset;
+        pitch += yoffset;
 
-	void Update()
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
+        if (pitch > 89.0f)
+            pitch = 89.0f;
+        if (pitch < -89.0f)
+            pitch = -89.0f;
 
-	void LateUpdate()
-	{
-		glutSwapBuffers();
-	}
+        UpdateCameraVectors();
+    }
+
+    void ProcessMouseScroll(int wheel, int direction, int x, int y) {
+        fov -= direction * 2.5f;
+        if (fov < 1.0f)
+            fov = 1.0f;
+        if (fov > 45.0f)
+            fov = 45.0f;
+    }
+
+
+    int ScreenWidth;
+    int ScreenHeight;
+
+private:
+    glm::vec3 position;
+    glm::vec3 front;
+    glm::vec3 up;
+    float yaw;
+    float pitch;
+    float fov;
+
+    int screenWidth;
+    int screenHeight;
+
+    float lastX = 400.0f;
+    float lastY = 300.0f;
+    bool firstMouse = true;
+
+    void UpdateCameraVectors() {
+        glm::vec3 newFront;
+        newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        newFront.y = sin(glm::radians(pitch));
+        newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front = glm::normalize(newFront);
+    }
 };

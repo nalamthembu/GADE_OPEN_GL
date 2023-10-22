@@ -1,3 +1,5 @@
+#pragma region BOILER_INCLUDES
+
 #include <iostream>
 #include "PlayerInput.h"
 #include "GL/glew.h"
@@ -7,33 +9,48 @@
 #include "components/Terrain.h"
 #include "components/Chessboard.h"
 #include "components/TextureManager.h"
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
+#pragma endregion
+
+//CHESS_PIECES
+#include "Chesspiece.h"
+#include "Pawn.h"
+#include "King.h"
+#include "Queen.h"
+#include "Rook.h"
+
+const int WIDTH = 640;
+const int HEIGHT = 480;
 
 void init();
 void display();
 void initGameObjects();
 void cleanUp();
+void keyboard(unsigned char key, int x, int y);
 void timer(int);
-void CameraCycle(vec3 camPosition);
-void specialKeyInput(int key, int x, int y);
 
-vec3 camPositions[3]
-{
-	vec3(-100, 100, -20),
-	vec3(0, 10, -8),
-	vec3(-10, 10, -8),
-};
+//camera stuff
+void reshape(int width, int height);
+void keyboard(unsigned char key, int x, int y);
+void motion(int x, int y);
+void mouseWheel(int wheel, int direction, int x, int y);
+
+
 
 TextureManager* textureManager;
 Chessboard* chessboard;
-TextureCube* border[10][10];
-Terrain* terrain;
-Camera* camera;
-PlayerInput* input;
 
-//Chesspiece nameofboard[18 * 2]
+Terrain* terrain;
+Camera camera(1920, 1080);
+PlayerInput* input;
+Chesspiece* boardPieces[8][8];
+
 
 
 int main(int argc, char* argv[])
@@ -50,6 +67,13 @@ int main(int argc, char* argv[])
 	glutCreateWindow("OpenGL Chess");
 
 	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutKeyboardFunc(keyboard);
+	glutPassiveMotionFunc(motion);
+	glutMouseWheelFunc(mouseWheel);
+
+	glEnable(GL_DEPTH_TEST);
+
 	glutTimerFunc(0, timer, 0);
 
 	init();
@@ -64,27 +88,16 @@ int main(int argc, char* argv[])
 
 void init()
 {
-	//Create camera
-	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
-
 	//Where the camera is in 3D space. (world)
 	vec3 cameraPosition = vec3(0, 10, -8);
 
 	//The target that the camera is looking at.
 	vec3 cameraTarget = vec3(0, 0, 0);
-	
-	camera->LookAt(cameraPosition, cameraTarget);
-
-	float c = 0.25F;
-
-	camera->SetClearColour(vec4(0, 208.0F/255, 1, 1));
-
-	input = new PlayerInput();
-
-	glutSpecialFunc(specialKeyInput);
 
 	//Creation of gameObjects.
 	initGameObjects();
+
+	glClearColor(0, 12/225.0f, 82/225.0f, 1);
 }
 
 void initGameObjects()
@@ -95,26 +108,46 @@ void initGameObjects()
 	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 5);
 	terrain->GenerateDisplayList();
 
-	for (int x = 0; x < 10; x++) 
-	{
-		for (int y = 0; y < 10; y++)
-		{
-			//Position & centre the Border
-			float xPos = x - 4.5;
-			float yPos = -0.5;
-			float zPos = y - 4.5;
+	//Place Pieces
 
-			if (x < 1  || x > 8 ||  y < 1 || y > 8)
+	int boardXLength = 8;
+	int boardYLength = 8;
+
+	for (int x = 0; x < boardXLength; x++)
+	{
+		for (int y = 0; y < boardYLength; y++)
+		{
+			//Place Rooks
+			if (x == 0 && y == 0 || x == boardXLength - 1 && y == 0)
 			{
-				//Creating a border cube
-				border[x][y] = new TextureCube();
-				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
-				border[x][y]->SetScale(vec3(1., 0.25, 1));
+				boardPieces[y][x] = new Rook(PieceColour::BLACK);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
 			}
-			else
+
+			//Place Kings
+			if (x == 3 && y == 0)
 			{
-				border[x][y] = new TextureCube();
-				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
+				boardPieces[y][x] = new King(PieceColour::BLACK);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+			}
+
+			//Place Queens
+			if (x == 4 && y == 0)
+			{
+				boardPieces[y][x] = new Queen(PieceColour::BLACK);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+			}
+
+			//Place Pawns
+
+			if (x > 0 && x < 2)
+			{
+				boardPieces[y][x] = new Pawn(PieceColour::BLACK);
+
+				boardPieces[y][x]->SetPosition(vec3(x, 0, y));
 			}
 		}
 	}
@@ -124,92 +157,70 @@ void cleanUp()
 {
 	//Garbage Collection.
 	delete textureManager;
-	delete camera;
 	delete chessboard;
 	delete terrain;
 	delete input;
+	delete boardPieces;
 }
 
 float t; 
 
-void display()
-{
-	camera->Update();
+void display() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(glm::value_ptr(camera.GetViewMatrix()));
 
-	#pragma region RENDER_OBJECTS
-	
-	//TEMPORARILY DISABLE TEXTURES
-	glDisable(GL_TEXTURE_2D);
+	// Draw your 3D scene here
 
-	terrain->draw();
+	glDisable(GL_TEXTURE);
 
-	//RENDER THE BOARDERS
-	
-	for (int x = 0; x < 10; x++)
+	int boardXLength = 8;
+	int boardYLength = 8;
+
+	for (int x = 0; x < boardXLength; x++)
 	{
-		for (int y = 0; y < 10; y++)
+		for (int y = 0; y < boardYLength; y++)
 		{
-			textureManager->useTexture("gold");
-			border[x][y]->draw();
+			if (boardPieces[x][y] != NULL)
+			{
+				boardPieces[x][y]->update();
+			}
 		}
 	}
 
-	chessboard->Update(textureManager);
-
-	//DONT_RENDER_OBJECTS_PAST_THIS_POINT
-
-	#pragma endregion
-
-	camera->LateUpdate();
+	glutSwapBuffers();
 }
+
+#pragma region WINDOW_AND_CONTROLS
 
 void timer(int)
 {
 	glutPostRedisplay();
-	glutTimerFunc(1000 / 60, timer, 0);
+	glutTimerFunc(1000 / 120, timer, 0);
 }
 
-void CameraCycle(vec3 camPosition)
+void reshape(int width, int height) 
 {
-	//Create a new camera
-	camera = new Camera(60, HEIGHT, WIDTH, 1.0, 1000.0F);
-
-	//Where the camera is in 3D space. (world)
-	vec3 cameraPosition = camPosition;
-
-	//The target that the camera is looking at.
-	vec3 cameraTarget = vec3(0, 0, 0);
-
-	camera->LookAt(cameraPosition, cameraTarget);
+	glViewport(0, 0, width, height);
+	camera.ScreenWidth = width;
+	camera.ScreenHeight = height;
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(camera.GetProjectionMatrix()));
 }
 
-int currentPos;
-
-void specialKeyInput(int key, int x, int y)
-{
-	switch (key)
-	{
-	case GLUT_KEY_LEFT:
-		currentPos--;
-		break;
-
-	case GLUT_KEY_RIGHT:
-		currentPos++;
-		break;
-	}
-
-	if (currentPos > 3)
-	{
-		currentPos = 0;
-	}
-	else if (currentPos < 0)
-	{
-		currentPos = 3;
-	}
-
-	CameraCycle(camPositions[currentPos]);
-
-	camera->Update();
-
+void keyboard(unsigned char key, int x, int y) {
+	camera.ProcessInput(key, x, y);
 	glutPostRedisplay();
 }
+
+void motion(int x, int y) {
+	camera.ProcessMouseMovement(x, y);
+	glutPostRedisplay();
+}
+
+void mouseWheel(int wheel, int direction, int x, int y) {
+	camera.ProcessMouseScroll(wheel, direction, x, y);
+	glutPostRedisplay();
+}
+
+#pragma endregion

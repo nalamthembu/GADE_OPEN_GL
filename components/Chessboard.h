@@ -8,6 +8,7 @@ using namespace glm;
 class Chessboard
 {
 	TextureCube* pCubes[100][100];
+	TextureCube* border[10][10];
 	vec2 position = vec2(0, 0);
 	int sizeX, sizeY;
 	float randomY = 0;

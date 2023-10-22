@@ -9,9 +9,11 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Chess Pieces">
+      <UniqueIdentifier>{507d7ced-2551-4c80-8701-b1ceee9c79dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primitive Shapes">
+      <UniqueIdentifier>{484073b5-22bc-445c-b105-bf2599db7ecd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,26 +44,38 @@
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cone.cpp">
+      <Filter>Primitive Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Primitive Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Torus.cpp">
+      <Filter>Primitive Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveShape.cpp">
+      <Filter>Primitive Shapes</Filter>
+    </ClCompile>
     <ClCompile Include="Chesspiece.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="King.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Queen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bishop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Knight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rook.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Chess Pieces</Filter>
     </ClCompile>
     <ClCompile Include="Pawn.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Chess Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Primitive Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="King.cpp">
+      <Filter>Chess Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Primitive Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Rook.cpp">
+      <Filter>Chess Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Queen.cpp">
+      <Filter>Chess Pieces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,9 +100,6 @@
     <ClInclude Include="components\Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\Plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\Chessboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -98,26 +109,50 @@
     <ClInclude Include="PlayerInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Chesspiece.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Cone.h">
+      <Filter>Primitive Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="King.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PrimitiveShape.h">
+      <Filter>Primitive Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="components\Plane.h">
+      <Filter>Primitive Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Primitive Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Torus.h">
+      <Filter>Primitive Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Queen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bishop.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Knight.h">
-      <Filter>Header Files</Filter>
+      <Filter>Chess Pieces</Filter>
     </ClInclude>
     <ClInclude Include="Rook.h">
-      <Filter>Header Files</Filter>
+      <Filter>Chess Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="King.h">
+      <Filter>Chess Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>Chess Pieces</Filter>
     </ClInclude>
     <ClInclude Include="Pawn.h">
-      <Filter>Header Files</Filter>
+      <Filter>Chess Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="PieceColour.h">
+      <Filter>Chess Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Bishop.h">
+      <Filter>Chess Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Chesspiece.h">
+      <Filter>Chess Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Primitive Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>Primitive Shapes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "TextureCube.h"
 #include "TextureManager.h"
 #include <random>
+#include "GL/freeglut.h"
 
 Chessboard::Chessboard(int sizeX, int sizeY)
 {
@@ -34,6 +35,30 @@ Chessboard::Chessboard(int sizeX, int sizeY, float minRan, float maxRan)
 			this->pCubes[x][y]->setPosition(vec3(x, 0, y));
 		}
 	}
+
+	for (int x = 0; x < 10; x++)
+	{
+		for (int y = 0; y < 10; y++)
+		{
+			//Position & centre the Border
+			float xPos = x - 4.5;
+			float yPos = -0.5;
+			float zPos = y - 4.5;
+
+			if (x < 1 || x > 8 || y < 1 || y > 8)
+			{
+				//Creating a border cube
+				border[x][y] = new TextureCube();
+				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
+				border[x][y]->SetScale(vec3(1., 0.25, 1));
+			}
+			else
+			{
+				border[x][y] = new TextureCube();
+				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
+			}
+		}
+	}
 }
 
 void Chessboard::SetPosition(vec2 position)
@@ -60,6 +85,16 @@ Chessboard::~Chessboard()
 			delete this->pCubes[x][y];
 		}
 	}
+
+	for (int x = 0; x < 10; x++)
+	{
+		for (int y = 0; y < 10; y++)
+		{
+			delete this->border[x][y];
+		}
+	}
+
+	delete border;
 	
 	delete pCubes;
 }
@@ -75,22 +110,37 @@ float Chessboard::GetRandomNumber(float min, float max)
 
 void Chessboard::Update(TextureManager* texManager)
 {
-	for (int x = 0; x < this->sizeX; x++)
+	glPushMatrix();
 	{
-		for (int y = 0; y < this->sizeY; y++)
+		for (int x = 0; x < 10; x++)
 		{
-			if ((x + y) % 2 == 0)
-				texManager->useTexture("black_block");
-			else
-				texManager->useTexture("white_block");
+			for (int y = 0; y < 10; y++)
+			{
+				texManager->useTexture("gold");
+				border[x][y]->draw();
+			}
+		}
 
-			float xPos = x - 3.5;
-			float yPos = 0.1;
-			float zPos = y - 3.5;
+		for (int x = 0; x < this->sizeX; x++)
+		{
+			for (int y = 0; y < this->sizeY; y++)
+			{
+				if ((x + y) % 2 == 0)
+					texManager->useTexture("black_block");
+				else
+					texManager->useTexture("white_block");
 
-			pCubes[x][y]->setPosition(vec3(xPos, yPos, zPos));
+				float xPos = x - 3.5;
+				float yPos = 0.1;
+				float zPos = y - 3.5;
 
-			pCubes[x][y]->draw();
+				pCubes[x][y]->setPosition(vec3(xPos, yPos, zPos));
+
+				pCubes[x][y]->draw();
+			}
 		}
 	}
+	glPopMatrix();
+
+	glDisable(GL_TEXTURE);
 }
