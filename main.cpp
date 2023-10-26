@@ -53,8 +53,6 @@ Camera camera(800, 600);
 PlayerInput* input;
 Chesspiece* boardPieces[8][8];
 
-Knight knight(PieceColour::WHITE);
-
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
@@ -119,40 +117,146 @@ void initGameObjects()
 	{
 		for (int y = 0; y < boardYLength; y++)
 		{
-			//Place Rooks
+
+#pragma region PLACE_WHITE_PIECES
+
+			//Place W Rooks
+			if (x == 0 && y == boardYLength - 1|| x == boardXLength - 1 && y == boardYLength - 1)
+			{
+				boardPieces[y][x] = new Rook(PieceColour::WHITE);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
+			}
+
+			//Place W Knights
+
+			if (x == 1 && y == boardYLength - 1 || x == boardXLength - 2 && y == boardYLength - 1)
+			{
+				boardPieces[y][x] = new Knight(PieceColour::WHITE);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				boardPieces[y][x]->SetRotation(vec3(0, -90, 0));
+
+				continue;
+			}
+
+			//Place W Bishops
+			if (x == 2 && y == boardYLength - 1 || x == boardXLength - 3 && y == boardYLength - 1)
+			{
+				boardPieces[y][x] = new Bishop(PieceColour::WHITE);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
+			}
+
+
+			//Place W Kings
+			if (x == 3 && y == boardYLength - 1)
+			{
+				boardPieces[y][x] = new King(PieceColour::WHITE);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
+			}
+
+			//Place W Queens
+			if (x == 4 && y == boardYLength - 1)
+			{
+				boardPieces[y][x] = new Queen(PieceColour::WHITE);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
+			}
+
+			//Place W Pawns
+
+			if (x > 0 && y == boardYLength - 2)
+			{
+				boardPieces[y][x] = new Pawn(PieceColour::WHITE);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
+			}
+#pragma endregion
+
+
+#pragma region PLACE_BLACK_PIECES
+
+
+
+			//Place B Rooks
 			if (x == 0 && y == 0 || x == boardXLength - 1 && y == 0)
 			{
 				boardPieces[y][x] = new Rook(PieceColour::BLACK);
 
 				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
+			}
+
+			//Place B Knights
+
+			if (x == 1 && y == 0 || x == boardXLength - 2 && y == 0)
+			{
+				boardPieces[y][x] = new Knight(PieceColour::BLACK);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				boardPieces[y][x]->SetRotation(vec3(0, 90, 0));
+
+				continue;
+			}
+
+			//Place B Bishops
+			if (x == 2 && y == 0 || x == boardXLength - 3 && y == 0)
+			{
+				boardPieces[y][x] = new Bishop(PieceColour::BLACK);
+
+				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
 			}
 
 
-
-			//Place Kings
+			//Place B Kings
 			if (x == 3 && y == 0)
 			{
 				boardPieces[y][x] = new King(PieceColour::BLACK);
 
 				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
 			}
 
-			//Place Queens
+			//Place B Queens
 			if (x == 4 && y == 0)
 			{
 				boardPieces[y][x] = new Queen(PieceColour::BLACK);
 
 				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+
+				continue;
 			}
 
-			//Place Pawns
+			//Place B Pawns
 
 			if (x > 0 && x < 2)
 			{
 				boardPieces[y][x] = new Pawn(PieceColour::BLACK);
 
 				boardPieces[y][x]->SetPosition(vec3(x, 0, y));
+
+				continue;
 			}
+
+#pragma endregion
 		}
 	}
 }
@@ -176,11 +280,12 @@ void display() {
 
 	// Draw your 3D scene here
 
-	//chessboard->Update(textureManager);
+	chessboard->Update(textureManager);
 
-	knight.update();
+	glDisable(GL_TEXTURE_2D);
 
-	/*
+	terrain->draw();
+	
 	int boardXLength = 8;
 	int boardYLength = 8;
 
@@ -194,7 +299,7 @@ void display() {
 			}
 		}
 	}
-	*/
+	
 
 	glutSwapBuffers();
 }
