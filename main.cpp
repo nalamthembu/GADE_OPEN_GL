@@ -172,6 +172,8 @@ void display() {
 
 	// Draw your 3D scene here
 
+	chessboard->Update(textureManager);
+
 	glDisable(GL_TEXTURE);
 
 	int boardXLength = 8;

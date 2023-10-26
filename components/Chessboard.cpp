@@ -36,14 +36,15 @@ Chessboard::Chessboard(int sizeX, int sizeY, float minRan, float maxRan)
 		}
 	}
 
+	/*
 	for (int x = 0; x < 10; x++)
 	{
 		for (int y = 0; y < 10; y++)
 		{
 			//Position & centre the Border
-			float xPos = x - 4.5;
-			float yPos = -0.5;
-			float zPos = y - 4.5;
+			float xPos = x;
+			float yPos = -0.5F;
+			float zPos = y;
 
 			if (x < 1 || x > 8 || y < 1 || y > 8)
 			{
@@ -59,6 +60,7 @@ Chessboard::Chessboard(int sizeX, int sizeY, float minRan, float maxRan)
 			}
 		}
 	}
+	*/
 }
 
 void Chessboard::SetPosition(vec2 position)
@@ -112,6 +114,7 @@ void Chessboard::Update(TextureManager* texManager)
 {
 	glPushMatrix();
 	{
+		/*
 		for (int x = 0; x < 10; x++)
 		{
 			for (int y = 0; y < 10; y++)
@@ -120,6 +123,7 @@ void Chessboard::Update(TextureManager* texManager)
 				border[x][y]->draw();
 			}
 		}
+		*/
 
 		for (int x = 0; x < this->sizeX; x++)
 		{
@@ -130,9 +134,9 @@ void Chessboard::Update(TextureManager* texManager)
 				else
 					texManager->useTexture("white_block");
 
-				float xPos = x - 3.5;
-				float yPos = 0.1;
-				float zPos = y - 3.5;
+				float xPos = x;
+				float yPos = -0.15F;
+				float zPos = y;
 
 				pCubes[x][y]->setPosition(vec3(xPos, yPos, zPos));
 
