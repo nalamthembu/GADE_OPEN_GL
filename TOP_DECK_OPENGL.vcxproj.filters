@@ -77,6 +77,12 @@
     <ClCompile Include="Queen.cpp">
       <Filter>Chess Pieces</Filter>
     </ClCompile>
+    <ClCompile Include="Bishop.cpp">
+      <Filter>Chess Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>Chess Pieces</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\Camera.h">

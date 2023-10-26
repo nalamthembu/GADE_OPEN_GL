@@ -24,6 +24,8 @@
 #include "King.h"
 #include "Queen.h"
 #include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
@@ -47,11 +49,11 @@ TextureManager* textureManager;
 Chessboard* chessboard;
 
 Terrain* terrain;
-Camera camera(1920, 1080);
+Camera camera(800, 600);
 PlayerInput* input;
 Chesspiece* boardPieces[8][8];
 
-
+Knight knight(PieceColour::WHITE);
 
 int main(int argc, char* argv[])
 {
@@ -125,6 +127,8 @@ void initGameObjects()
 				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
 			}
 
+
+
 			//Place Kings
 			if (x == 3 && y == 0)
 			{
@@ -172,10 +176,11 @@ void display() {
 
 	// Draw your 3D scene here
 
-	chessboard->Update(textureManager);
+	//chessboard->Update(textureManager);
 
-	glDisable(GL_TEXTURE);
+	knight.update();
 
+	/*
 	int boardXLength = 8;
 	int boardYLength = 8;
 
@@ -189,6 +194,7 @@ void display() {
 			}
 		}
 	}
+	*/
 
 	glutSwapBuffers();
 }
