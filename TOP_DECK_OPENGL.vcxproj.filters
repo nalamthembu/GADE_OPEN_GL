@@ -15,6 +15,9 @@
     <Filter Include="Primitive Shapes">
       <UniqueIdentifier>{484073b5-22bc-445c-b105-bf2599db7ecd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{4d467cf7-8f3d-42ba-ba5f-540633861c29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,6 +85,24 @@
     </ClCompile>
     <ClCompile Include="Knight.cpp">
       <Filter>Chess Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="VBO.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VAO.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture_.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="EBO.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,5 +181,28 @@
     <ClInclude Include="Cylinder.h">
       <Filter>Primitive Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="VBO.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture_.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="EBO.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default.frag">
+      <Filter>Rendering</Filter>
+    </None>
+    <None Include="default.vert">
+      <Filter>Rendering</Filter>
+    </None>
   </ItemGroup>
 </Project>
