@@ -30,8 +30,6 @@
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Cylinder.cpp" />
-    <ClCompile Include="EBO.cpp" />
-    <ClCompile Include="glad.c" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
@@ -40,18 +38,13 @@
     <ClCompile Include="PrimitiveShape.cpp" />
     <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Rook.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="stb.cpp" />
-    <ClCompile Include="Texture_.cpp" />
     <ClCompile Include="Torus.cpp" />
-    <ClCompile Include="VAO.cpp" />
-    <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Chesspiece.h" />
-    <ClInclude Include="Colour.h" />
     <ClInclude Include="components\Camera.h" />
     <ClInclude Include="components\Chessboard.h" />
     <ClInclude Include="components\GameObject.h" />
@@ -64,7 +57,6 @@
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Cylinder.h" />
-    <ClInclude Include="EBO.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Pawn.h" />
@@ -72,17 +64,12 @@
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PrimitiveShape.h" />
     <ClInclude Include="Queen.h" />
+    <ClInclude Include="Rendering\Quad.h" />
+    <ClInclude Include="Rendering\QuadColour.h" />
+    <ClInclude Include="Rendering\Vertex.h" />
     <ClInclude Include="Rook.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Texture_.h" />
     <ClInclude Include="Torus.h" />
-    <ClInclude Include="VAO.h" />
-    <ClInclude Include="VBO.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="default.frag" />
-    <None Include="default.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -142,7 +129,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\KHR;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)components;$(SolutionDir)Rendering;$(SolutionDir)include\KHR;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

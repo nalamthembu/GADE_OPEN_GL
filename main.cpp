@@ -108,7 +108,7 @@ void initGameObjects()
 	textureManager = new TextureManager();
 	chessboard = new Chessboard(8, 8, 0.5F, 1);
 	chessboard->SetPosition(vec2(0, 0));
-	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 5);
+	terrain = new Terrain(textureManager->getTexture("Heightmap"), textureManager->getTexture("dirt_seamless"), 100, 5);
 	terrain->GenerateDisplayList();
 
 	//Place Pieces

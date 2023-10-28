@@ -10,6 +10,7 @@ TextureManager::TextureManager()
 {
 	textures.insert({ "brick", new Texture("Textures/bricks.png") });
 	textures.insert({ "dirt", new Texture("Textures/dirt.png") });
+	textures.insert({ "dirt_seamless", new Texture("Textures/dirt_seamless.png") });
 	textures.insert({ "gold", new Texture("Textures/gold_block.png") });
 	textures.insert({ "ice", new Texture("Textures/frosted_ice.png") });
 	textures.insert({ "Heightmap", new Texture("Textures/height_map_top_deck.png",3) });

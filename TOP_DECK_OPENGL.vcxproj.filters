@@ -86,24 +86,6 @@
     <ClCompile Include="Knight.cpp">
       <Filter>Chess Pieces</Filter>
     </ClCompile>
-    <ClCompile Include="VBO.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="VAO.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture_.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="EBO.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\Camera.h">
@@ -128,9 +110,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\Chessboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Colour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerInput.h">
@@ -181,28 +160,14 @@
     <ClInclude Include="Cylinder.h">
       <Filter>Primitive Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="VBO.h">
+    <ClInclude Include="Rendering\Vertex.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="VAO.h">
+    <ClInclude Include="Rendering\Quad.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="Rendering\QuadColour.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Texture_.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="EBO.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="default.frag">
-      <Filter>Rendering</Filter>
-    </None>
-    <None Include="default.vert">
-      <Filter>Rendering</Filter>
-    </None>
   </ItemGroup>
 </Project>
