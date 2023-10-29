@@ -66,7 +66,6 @@
     <ClInclude Include="Primitives\Torus.h" />
     <ClInclude Include="Queen.h" />
     <ClInclude Include="Rendering\Quad.h" />
-    <ClInclude Include="Rendering\QuadColour.h" />
     <ClInclude Include="Rendering\QuadTexCoord.h" />
     <ClInclude Include="Rendering\Vertex.h" />
     <ClInclude Include="Rook.h" />

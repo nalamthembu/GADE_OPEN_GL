@@ -1,6 +1,7 @@
 #pragma once
 #include "Vertex.h"
 
+//This class is used to store 4 vertices to create a quad.
 struct Quad
 {
 	Vertex vert1;

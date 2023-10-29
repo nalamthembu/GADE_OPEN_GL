@@ -5,7 +5,6 @@
 #include "glm/glm.hpp"
 #include "TextureManager.h"
 #include "Quad.h"
-#include "QuadColour.h"
 #include "QuadTexCoord.h"
 
 using namespace glm;

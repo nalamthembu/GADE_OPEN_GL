@@ -26,13 +26,7 @@
     <ClCompile Include="components\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="components\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="components\TextureCube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="components\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="components\Chessboard.cpp">
@@ -86,6 +80,12 @@
     <ClCompile Include="Primitives\Cone.cpp">
       <Filter>Primitive Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="components\Texture.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="components\TextureManager.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\Camera.h">
@@ -94,16 +94,7 @@
     <ClInclude Include="components\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\Pixel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\TextureCube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\Terrain.h">
@@ -145,9 +136,6 @@
     <ClInclude Include="Rendering\Quad.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\QuadColour.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Rendering\QuadTexCoord.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -168,6 +156,15 @@
     </ClInclude>
     <ClInclude Include="Primitives\Torus.h">
       <Filter>Primitive Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="components\Texture.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="components\Pixel.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="components\TextureManager.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

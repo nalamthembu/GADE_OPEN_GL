@@ -1,4 +1,6 @@
 #pragma once
+
+//This is a structure that stores normalised (x,y) positions of a vertex to be used as texture coordinates
 struct QuadTexCoord
 {
 	float x1;

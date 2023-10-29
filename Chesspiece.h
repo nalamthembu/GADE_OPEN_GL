@@ -3,6 +3,7 @@
 #include "GL/freeglut.h"
 #include "PieceColour.h"
 
+//This is the base class for all subsequent chesspieces
 class Chesspiece
 {
 protected:

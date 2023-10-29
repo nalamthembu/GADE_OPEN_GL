@@ -1,4 +1,6 @@
 #pragma once
+
+//This is a struct that stores the (x,y,z) components of a vertex.
 struct Vertex
 {
 	float x;
