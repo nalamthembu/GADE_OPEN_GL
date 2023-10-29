@@ -4,7 +4,7 @@ void Pawn::draw()
 {
 	//Colour
 
-	//cylinder->update();
+	cylinder->update();
 
 	cone->update();
 

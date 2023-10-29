@@ -30,7 +30,7 @@
 #include "Bishop.h"
 #include "Knight.h"
 
-const int WIDTH = 640;
+const int WIDTH = 854;
 const int HEIGHT = 480;
 
 void init();
@@ -46,13 +46,18 @@ void keyboard(unsigned char key, int x, int y);
 void motion(int x, int y);
 void mouseWheel(int wheel, int direction, int x, int y);
 
+float lastFrame;
+float deltaTime;
+
+//ANIMATION STUFF
+bool animationIsEnabled = false;
 
 
 TextureManager* textureManager;
 Chessboard* chessboard;
 
 Terrain* terrain;
-Camera camera(800, 600);
+Camera camera(854, 480);
 PlayerInput* input;
 Chesspiece* boardPieces[8][8];
 
@@ -91,11 +96,11 @@ int main(int argc, char* argv[])
 
 void init()
 {
-	//Where the camera is in 3D space. (world)
-	vec3 cameraPosition = vec3(0, 10, -8);
+	//TITLE CONSOLE
+	system("title Console");
 
-	//The target that the camera is looking at.
-	vec3 cameraTarget = vec3(0, 0, 0);
+	//Colour Console
+	system("color a");
 
 	//Creation of gameObjects.
 	initGameObjects();
@@ -129,6 +134,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Rook(PieceColour::WHITE);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//BLACK_ROOKS
@@ -137,6 +145,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Rook(PieceColour::BLACK);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//WHITE_KNIGHTS
@@ -145,6 +156,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Knight(PieceColour::WHITE);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//BLACK_KNIGHT
@@ -155,6 +169,9 @@ void initGameObjects()
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 
 				boardPieces[x][y]->SetRotation(vec3(0, 180, 0));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//WHITE_BISHOPS 
@@ -163,6 +180,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Bishop(PieceColour::WHITE);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//BLACK_BISHOP 
@@ -171,6 +191,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Bishop(PieceColour::BLACK);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//WHITE_QUEEN
@@ -179,6 +202,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Queen(PieceColour::WHITE);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//BLACK_QUEEN
@@ -187,6 +213,9 @@ void initGameObjects()
 				boardPieces[x][y] = new Queen(PieceColour::BLACK);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//BLACK_KING
@@ -195,6 +224,9 @@ void initGameObjects()
 				boardPieces[x][y] = new King(PieceColour::BLACK);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 
 			//WHITE_KING
@@ -203,6 +235,31 @@ void initGameObjects()
 				boardPieces[x][y] = new King(PieceColour::WHITE);
 
 				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
+			}
+
+			//WHITE_PAWNS
+			if (x < maxX - 1 && y == 1)
+			{
+				boardPieces[x][y] = new Pawn(PieceColour::WHITE);
+
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
+			}
+
+			//WHITE_PAWNS
+			if (x < maxX - 1 && y == maxY - 2)
+			{
+				boardPieces[x][y] = new Pawn(PieceColour::BLACK);
+
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+
+				//SET ORIGINAL POSITION
+				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
 			}
 		}
 	}
@@ -220,7 +277,7 @@ void cleanUp()
 	delete boardPieces;
 }
 
-float t; 
+float animationTimer = 0;
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -242,24 +299,54 @@ void display() {
 
 	glDisable(GL_TEXTURE_2D);
 
+	//ANIMATION TIMER
+	if (animationIsEnabled)
+		animationTimer += deltaTime;
+	else
+	{
+		animationTimer = 0;
+	}
+
 	for (int x = 0; x < boardXLength; x++)
 	{
 		for (int y = 0; y < boardYLength; y++)
 		{
-			if (boardPieces[x][y] != NULL)
+			//skip null pieces.
+			if (boardPieces[x][y] == NULL)
+				continue;
+
+			//COLOUR THE PIECES USING TEXTURES
+			if (boardPieces[x][y]->GetColour() == PieceColour::BLACK)
+				textureManager->useTexture("black_marble");
+
+			if (boardPieces[x][y]->GetColour() == PieceColour::WHITE)
+				textureManager->useTexture("white_marble");
+
+			//ANIMATION
+
+			if (animationIsEnabled)
 			{
-				if (boardPieces[x][y]->GetColour() == PieceColour::BLACK) {
-					textureManager->useTexture("black_marble");
-					boardPieces[x][y]->update();
-					continue;
+				boardPieces[x][y]->MoveForward();
+
+				//Check if the pieces moved past the upper and lower limits of the board.
+				if (boardPieces[x][y]->getPosition().z > chessboard->getBoardTile(boardXLength, boardYLength).z ||
+					boardPieces[x][y]->getPosition().z < chessboard->getBoardTile(0, 0).z)
+				{
+					boardPieces[x][y]->SetPosition(boardPieces[x][y]->originalPosition);
 				}
 
-				if (boardPieces[x][y]->GetColour() == PieceColour::WHITE) {
-					textureManager->useTexture("white_marble");
-					boardPieces[x][y]->update();
-					continue;
-				}
+				animationTimer = 0;
 			}
+
+			if (!animationIsEnabled)
+			{
+				//RESET PIECE TO ORIGINAL POSITION IF ANIMATION IS DISABLED.
+				boardPieces[x][y]->SetPosition(boardPieces[x][y]->originalPosition);
+			}
+
+			//DRAW THE PIECE
+			boardPieces[x][y]->update();
+
 		}
 	}
 
@@ -272,6 +359,11 @@ void timer(int)
 {
 	glutPostRedisplay();
 	glutTimerFunc(1000 / 120, timer, 0);
+
+	float currentFrame = GetCurrentTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+	deltaTime /= 1000;
 }
 
 void reshape(int width, int height) 
@@ -285,6 +377,21 @@ void reshape(int width, int height)
 
 void keyboard(unsigned char key, int x, int y) {
 	camera.ProcessInput(key, x, y);
+
+	//32 is the spacebar
+	if (key == 32)
+	{
+		system("cls");
+
+		//toggle animation
+		animationIsEnabled = !animationIsEnabled;
+
+		if (animationIsEnabled)
+			cout << "enabled animation" << endl;
+		else
+			cout << "disabled animation" << endl;
+	}
+
 	glutPostRedisplay();
 }
 

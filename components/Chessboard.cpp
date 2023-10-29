@@ -1,8 +1,4 @@
 #include "Chessboard.h"
-#include "TextureCube.h"
-
-//array of textured cubes
-TextureCube* textureCube[10][10];
 
 Chessboard::Chessboard(TextureManager *textureManager) {
 	this->textureManager = textureManager;
@@ -60,5 +56,9 @@ void Chessboard::draw()
 			}
 		}
 	}
+}
 
+vec3 Chessboard::getBoardTile(int x, int y)
+{
+	return textureCube[x][y]->getPosition();
 }

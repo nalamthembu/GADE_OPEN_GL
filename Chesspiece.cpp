@@ -1,5 +1,6 @@
 #include "Chesspiece.h"
 #include "GL/freeglut.h"
+#include <iostream>
 
 void Chesspiece::draw()
 {
@@ -47,7 +48,37 @@ void Chesspiece::SetScale(vec3 scale)
 	this->scale = scale;
 }
 
+vec3 Chesspiece::getPosition()
+{
+	return position;
+}
+
+
+vec3 Chesspiece::getRotation()
+{
+	return rotation;
+}
+
+vec3 Chesspiece::getScale()
+{
+	return scale;
+}
+
 PieceColour Chesspiece::GetColour()
 {
 	return this->colour;
+}
+
+void Chesspiece::MoveForward()
+{
+	switch (colour) {
+
+	case PieceColour::BLACK:
+		SetPosition(getPosition() + vec3(0, 0, -1));
+
+	case PieceColour::WHITE:
+		SetPosition(getPosition() + vec3(0, 0, 1));
+	}
+
+	std::cout << "Moved" << std::endl;
 }
