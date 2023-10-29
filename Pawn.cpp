@@ -20,21 +20,21 @@ Pawn::Pawn(PieceColour pieceColour) : Chesspiece(pieceColour)
 
 	cylinder->SetRotation(vec3(90, 0, 0));
 
-	cylinder->SetScale(vec3(0.5, 0.5, 0.5));
+	cylinder->setScale(vec3(0.5, 0.5, 0.5));
 
 	//Neck
 	cone = new Cone(1.0, 2.0, 6, 6);
 
-	cone->SetScale(vec3(0.35, 0.35, 0.35));
+	cone->setScale(vec3(0.35, 0.35, 0.35));
 
-	cone->SetPosition(cylinder->GetPosition() + vec3(0, 0.35, 0));
+	cone->setPosition(cylinder->GetPosition() + vec3(0, 0.35, 0));
 
 	//Head
 	sphere = new Sphere(2, 8, 8);
 
-	sphere->SetPosition(vec3(0, 0.65, 0));
+	sphere->setPosition(vec3(0, 0.65, 0));
 
-	sphere->SetScale(vec3(0.15, 0.15, 0.15));
+	sphere->setScale(vec3(0.15, 0.15, 0.15));
 }
 
 Pawn::~Pawn()

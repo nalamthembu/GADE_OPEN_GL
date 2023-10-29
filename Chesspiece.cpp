@@ -27,21 +27,6 @@ void Chesspiece::update()
 
 		glScaled(scale.x, scale.y, scale.z);
 
-		switch (colour)
-		{
-		case PieceColour::BLACK:
-
-			glColor3f(0, 0, 0);
-
-			break;
-
-		case PieceColour::WHITE:
-
-			glColor3f(1, 1, 1);
-
-			break;
-		}
-
 		draw();
 	}
 	glPopMatrix();
@@ -60,4 +45,9 @@ void Chesspiece::SetRotation(vec3 rotation)
 void Chesspiece::SetScale(vec3 scale)
 {
 	this->scale = scale;
+}
+
+PieceColour Chesspiece::GetColour()
+{
+	return this->colour;
 }

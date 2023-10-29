@@ -100,168 +100,114 @@ void init()
 	//Creation of gameObjects.
 	initGameObjects();
 
-	glClearColor(0, 12/225.0f, 82/225.0f, 1);
+	glClearColor(101 / 225.0F, 196 / 255.0F, 244 / 255.0F, 1);
 }
 
 void initGameObjects()
 {
 	textureManager = new TextureManager();
-	chessboard = new Chessboard(8, 8, 0.5F, 1);
-	chessboard->SetPosition(vec2(0, 0));
-	terrain = new Terrain(textureManager->getTexture("Heightmap"), textureManager->getTexture("dirt_seamless"), 100, 5);
+	chessboard = new Chessboard(textureManager);
+	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 10);
 	terrain->GenerateDisplayList();
 
 	//Place Pieces
 
-	int boardXLength = 8;
-	int boardYLength = 8;
+	int maxX = 8;
+	int maxY = 8;
 
-	for (int x = 0; x < boardXLength; x++)
+	for (int x = 0; x < maxX; x++)
 	{
-		for (int y = 0; y < boardYLength; y++)
+		for (int y = 0; y < maxY; y++)
 		{
+			float xPos = x - 3.5F;
+			float yPos = y - 3.5F;
+			float height = 1.80F;
 
-#pragma region PLACE_WHITE_PIECES
-
-			//Place W Rooks
-			if (x == 0 && y == boardYLength - 1|| x == boardXLength - 1 && y == boardYLength - 1)
+			//WHITE_ROOKS
+			if (x == 0 && y == 0 || x == maxX - 1 && y == 0)
 			{
-				boardPieces[y][x] = new Rook(PieceColour::WHITE);
+				boardPieces[x][y] = new Rook(PieceColour::WHITE);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
 
-			//Place W Knights
-
-			if (x == 1 && y == boardYLength - 1 || x == boardXLength - 2 && y == boardYLength - 1)
+			//BLACK_ROOKS
+			if (x == 0 && y == maxY - 1 || x == maxX - 1 && y == maxY - 1)
 			{
-				boardPieces[y][x] = new Knight(PieceColour::WHITE);
+				boardPieces[x][y] = new Rook(PieceColour::BLACK);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				boardPieces[y][x]->SetRotation(vec3(0, -90, 0));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
 
-			//Place W Bishops
-			if (x == 2 && y == boardYLength - 1 || x == boardXLength - 3 && y == boardYLength - 1)
+			//WHITE_KNIGHTS
+			if (x == 1 && y == 0 || x == maxX - 2 && y == 0)
 			{
-				boardPieces[y][x] = new Bishop(PieceColour::WHITE);
+				boardPieces[x][y] = new Knight(PieceColour::WHITE);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
 
-
-			//Place W Kings
-			if (x == 3 && y == boardYLength - 1)
+			//BLACK_KNIGHT
+			if (x == 1 && y == maxY - 1 || x == maxX - 2 && y == maxY - 1)
 			{
-				boardPieces[y][x] = new King(PieceColour::WHITE);
+				boardPieces[x][y] = new Knight(PieceColour::BLACK);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 
-				continue;
+				boardPieces[x][y]->SetRotation(vec3(0, 180, 0));
 			}
 
-			//Place W Queens
-			if (x == 4 && y == boardYLength - 1)
+			//WHITE_BISHOPS 
+			if (x == 2 && y == 0 || x == maxX - 3 && y == 0)
 			{
-				boardPieces[y][x] = new Queen(PieceColour::WHITE);
+				boardPieces[x][y] = new Bishop(PieceColour::WHITE);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
 
-			//Place W Pawns
-
-			if (x > 0 && y == boardYLength - 2)
+			//BLACK_BISHOP 
+			if (x == 2 && y == maxY - 1 || x == maxX - 3 && y == maxY - 1)
 			{
-				boardPieces[y][x] = new Pawn(PieceColour::WHITE);
+				boardPieces[x][y] = new Bishop(PieceColour::BLACK);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
-			}
-#pragma endregion
-
-
-#pragma region PLACE_BLACK_PIECES
-
-
-
-			//Place B Rooks
-			if (x == 0 && y == 0 || x == boardXLength - 1 && y == 0)
-			{
-				boardPieces[y][x] = new Rook(PieceColour::BLACK);
-
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
 
-			//Place B Knights
-
-			if (x == 1 && y == 0 || x == boardXLength - 2 && y == 0)
-			{
-				boardPieces[y][x] = new Knight(PieceColour::BLACK);
-
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				boardPieces[y][x]->SetRotation(vec3(0, 90, 0));
-
-				continue;
-			}
-
-			//Place B Bishops
-			if (x == 2 && y == 0 || x == boardXLength - 3 && y == 0)
-			{
-				boardPieces[y][x] = new Bishop(PieceColour::BLACK);
-
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
-			}
-
-
-			//Place B Kings
+			//WHITE_QUEEN
 			if (x == 3 && y == 0)
 			{
-				boardPieces[y][x] = new King(PieceColour::BLACK);
+				boardPieces[x][y] = new Queen(PieceColour::WHITE);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
 
-			//Place B Queens
+			//BLACK_QUEEN
+			if (x == 3 && y == maxY - 1)
+			{
+				boardPieces[x][y] = new Queen(PieceColour::BLACK);
+
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+			}
+
+			//BLACK_KING
+			if (x == 4 && y == maxY - 1)
+			{
+				boardPieces[x][y] = new King(PieceColour::BLACK);
+
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
+			}
+
+			//WHITE_KING
 			if (x == 4 && y == 0)
 			{
-				boardPieces[y][x] = new Queen(PieceColour::BLACK);
+				boardPieces[x][y] = new King(PieceColour::WHITE);
 
-				boardPieces[y][x]->SetPosition(vec3(y, 0, x));
-
-				continue;
+				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
 			}
-
-			//Place B Pawns
-
-			if (x > 0 && x < 2)
-			{
-				boardPieces[y][x] = new Pawn(PieceColour::BLACK);
-
-				boardPieces[y][x]->SetPosition(vec3(x, 0, y));
-
-				continue;
-			}
-
-#pragma endregion
 		}
 	}
+
+	terrain->setPosition(vec3(0, 3.0F, 0));
 }
 
 void cleanUp()
@@ -283,14 +229,18 @@ void display() {
 
 	// Draw your 3D scene here
 
-	chessboard->Update(textureManager);
+	chessboard->draw();
 
 	glDisable(GL_TEXTURE_2D);
+
+	textureManager->useTexture("cladding");
 
 	terrain->draw();
 	
 	int boardXLength = 8;
 	int boardYLength = 8;
+
+	glDisable(GL_TEXTURE_2D);
 
 	for (int x = 0; x < boardXLength; x++)
 	{
@@ -298,11 +248,20 @@ void display() {
 		{
 			if (boardPieces[x][y] != NULL)
 			{
-				boardPieces[x][y]->update();
+				if (boardPieces[x][y]->GetColour() == PieceColour::BLACK) {
+					textureManager->useTexture("black_marble");
+					boardPieces[x][y]->update();
+					continue;
+				}
+
+				if (boardPieces[x][y]->GetColour() == PieceColour::WHITE) {
+					textureManager->useTexture("white_marble");
+					boardPieces[x][y]->update();
+					continue;
+				}
 			}
 		}
 	}
-	
 
 	glutSwapBuffers();
 }

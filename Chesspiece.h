@@ -18,4 +18,5 @@ public:
 	void SetPosition(vec3 position);
 	void SetRotation(vec3 rotation);
 	void SetScale(vec3 scale);
+	PieceColour GetColour();
 };

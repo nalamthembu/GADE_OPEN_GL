@@ -6,21 +6,22 @@
 #include "TextureManager.h"
 #include "Quad.h"
 #include "QuadColour.h"
+#include "QuadTexCoord.h"
 
 using namespace glm;
 
 class Terrain : public GameObject
 {
 public:
-	Terrain(Texture* tex, Texture* colourMapTexture,float size, float height);
+	Terrain(Texture* tex, float size, float height);
 
 private:
 
 	vector<Quad> quads;
-	vector<QuadColour> colours;
+	vector<QuadTexCoord> texCoords;
 	int size, height;
 	Texture* heightMap;
-	Texture* colourMap;
+	float vertexBrightness = 1.25F;
 	void drawGeometry() override;
 	void generateGeometry();
 };

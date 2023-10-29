@@ -1,150 +1,64 @@
 #include "Chessboard.h"
 #include "TextureCube.h"
-#include "TextureManager.h"
-#include <random>
-#include "GL/freeglut.h"
 
-Chessboard::Chessboard(int sizeX, int sizeY)
-{
-	this->sizeX = sizeX;
-	this->sizeY = sizeY;
+//array of textured cubes
+TextureCube* textureCube[10][10];
 
-	for (int x = 0; x < this->sizeX; x++)
-	{
-		for (int y = 0; y < this->sizeY; y++)
-		{
-			this->pCubes[x][y] = new TextureCube();
-			this->pCubes[x][y]->SetScale(vec3(1, 0.15, 1));
-		}
-	}
+Chessboard::Chessboard(TextureManager *textureManager) {
+	this->textureManager = textureManager;
 }
 
-Chessboard::Chessboard(int sizeX, int sizeY, float minRan, float maxRan)
+Chessboard::~Chessboard() {
+	delete textureManager;
+}
+
+void Chessboard::draw()
 {
-	this->sizeX = sizeX;
-	this->sizeY = sizeY;
-
-	for (int x = 0; x < this->sizeX; x++)
+	for (int x = 0; x < 10; x++) //Increase the size of the board to 10x10 to include the border
 	{
-		for (int y = 0; y < this->sizeY; y++)
+		for (int y = 0; y < 10; y++) //Increase the size of the board to 10x10 to include the border
 		{
-			this->randomY = GetRandomNumber(minRan, maxRan);
+			//Adjust for the board size and border
+			//Center the board with the border
+			float xPos = x - 4.5;
+			float yPos = 1;
 
-			this->pCubes[x][y] = new TextureCube();
-			this->pCubes[x][y]->SetScale(vec3(1, 0, 1));
-			this->pCubes[x][y]->setPosition(vec3(x, 0, y));
-		}
-	}
+			//Center the board with the border
+			float zPos = y - 4.5;
 
-	/*
-	for (int x = 0; x < 10; x++)
-	{
-		for (int y = 0; y < 10; y++)
-		{
-			//Position & centre the Border
-			float xPos = x;
-			float yPos = -0.5F;
-			float zPos = y;
-
-			if (x < 1 || x > 8 || y < 1 || y > 8)
+			// Check if it's within the border, if not, create a border cube
+			if (x < 0 || x > 9 || y < 0 || y > 9)
 			{
 				//Creating a border cube
-				border[x][y] = new TextureCube();
-				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
-				border[x][y]->SetScale(vec3(1., 0.25, 1));
+				textureCube[x][y] = new TextureCube();
+				textureCube[x][y]->setPosition(vec3(xPos, yPos, zPos));
+
+				//Set the scale to 1 (no height change)
+				textureCube[x][y]->SetScale(vec3(1, 0.5, 1));
 			}
 			else
 			{
-				border[x][y] = new TextureCube();
-				border[x][y]->setPosition(vec3(xPos, yPos, zPos));
-			}
-		}
-	}
-	*/
-}
+				if (x == 0 || x == 9 || y == 0 || y == 9)
+				{
+					textureManager->useTexture("mossy_bricks");
+				}
 
-void Chessboard::SetPosition(vec2 position)
-{
-	this->position = position;
-}
-
-vec2 Chessboard::GetPosition()
-{
-	return this->position;
-}
-
-vec2 Chessboard::GetSize()
-{
-	return vec2(sizeX, sizeY);
-}
-
-Chessboard::~Chessboard()
-{
-	for (int x = 0; x < this->sizeX; x++)
-	{
-		for (int y = 0; y < this->sizeY; y++)
-		{
-			delete this->pCubes[x][y];
-		}
-	}
-
-	for (int x = 0; x < 10; x++)
-	{
-		for (int y = 0; y < 10; y++)
-		{
-			delete this->border[x][y];
-		}
-	}
-
-	delete border;
-	
-	delete pCubes;
-}
-
-float Chessboard::GetRandomNumber(float min, float max)
-{
-	std::random_device randomDev;
-	std::uniform_int_distribution<int> unifInt_Dis(min, max);
-
-	return unifInt_Dis(randomDev);
-}
-
-
-void Chessboard::Update(TextureManager* texManager)
-{
-	glPushMatrix();
-	{
-		/*
-		for (int x = 0; x < 10; x++)
-		{
-			for (int y = 0; y < 10; y++)
-			{
-				texManager->useTexture("gold");
-				border[x][y]->draw();
-			}
-		}
-		*/
-
-		for (int x = 0; x < this->sizeX; x++)
-		{
-			for (int y = 0; y < this->sizeY; y++)
-			{
-				if ((x + y) % 2 == 0)
-					texManager->useTexture("black_block");
+				//setting all even numbers to be black and odd to be white
+				else if ((x + y) % 2 == 0)
+				{
+					textureManager->useTexture("black_block");
+				}
 				else
-					texManager->useTexture("white_block");
+				{
+					textureManager->useTexture("white_block");
+				}
+				//Creating the inner chessboard cube
+				textureCube[x][y] = new TextureCube();
+				textureCube[x][y]->setPosition(vec3(xPos, yPos, zPos));
+				textureCube[x][y]->draw();
 
-				float xPos = x;
-				float yPos = -0.15F;
-				float zPos = y;
-
-				pCubes[x][y]->setPosition(vec3(xPos, yPos, zPos));
-
-				pCubes[x][y]->draw();
 			}
 		}
 	}
-	glPopMatrix();
 
-	glDisable(GL_TEXTURE);
 }
