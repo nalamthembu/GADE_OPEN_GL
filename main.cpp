@@ -1,34 +1,26 @@
 #pragma region BOILER_INCLUDES
-
 #include <iostream>
+
 #include "PlayerInput.h"
-#include "GL/glew.h"
-#include "GL/freeglut.h"
-#include "components/Terrain.h"
-#include "components/Camera.h"
-#include "components/Terrain.h"
-#include "components/Chessboard.h"
-#include "components/TextureManager.h"
+#include <GL/glew.h>
 #include <GL/freeglut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#define TINYOBJLOADER_IMPLEMENTATION
-#include <tinyobjloader/tiny_obj_loader.h>
+#include <sstream>
+#include <iomanip>
+#include <chrono>
 
 #pragma endregion
 
-//CHESS_PIECES
-#include "Chesspiece.h"
-#include "Pawn.h"
-#include "King.h"
-#include "Queen.h"
-#include "Rook.h"
-#include "Bishop.h"
-#include "Knight.h"
+#include "components/Camera.h"
+#include "components/TextureManager.h"
+#include "Light.h"
+#include "Model.h"
+
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <tinyobjloader/tiny_obj_loader.h>
 
 const int WIDTH = 854;
 const int HEIGHT = 480;
@@ -46,20 +38,72 @@ void keyboard(unsigned char key, int x, int y);
 void motion(int x, int y);
 void mouseWheel(int wheel, int direction, int x, int y);
 
-float lastFrame;
-float deltaTime;
-
-//ANIMATION STUFF
-bool animationIsEnabled = false;
-
-
 TextureManager* textureManager;
-Chessboard* chessboard;
 
-Terrain* terrain;
 Camera camera(854, 480);
 PlayerInput* input;
-Chesspiece* boardPieces[8][8];
+
+Model* chesspieces_white;
+Model* chesspieces_black;
+Model* terrain;
+Model* chessboard;
+
+bool displayFPS = false;
+
+//FPS COUNTER
+int fps = 0;
+auto lastTime = std::chrono::high_resolution_clock::now();
+int frameCount = 0;
+
+// Function to update FPS and display it
+void updateFPS() {
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	double deltaTime = std::chrono::duration<double, std::milli>(currentTime - lastTime).count() / 1000.0;
+
+	frameCount++;
+
+	if (deltaTime >= 1.0) {
+		fps = static_cast<int>(frameCount / deltaTime);
+		frameCount = 0;
+		lastTime = currentTime;
+	}
+
+	glutPostRedisplay();
+}
+
+void drawFPSCounter()
+{
+	//Disable Lighting for the FPS Counter
+	glDisable(GL_LIGHTING);
+
+	// Save the current projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+	// Save the current modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	// Draw FPS counter
+	glColor3f(1.0, 1.0, 1.0);
+	glRasterPos2f(-0.95, 0.9); // Adjusted position to top-left corner
+	std::stringstream ss;
+	ss << "FPS: " << std::setw(3) << std::setfill(' ') << fps;
+	std::string fpsString = ss.str();
+	for (char c : fpsString) {
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c);
+	}
+
+	// Restore the modelview matrix
+	glPopMatrix();
+
+	// Restore the projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+}
 
 int main(int argc, char* argv[])
 {
@@ -79,6 +123,7 @@ int main(int argc, char* argv[])
 	glutKeyboardFunc(keyboard);
 	glutPassiveMotionFunc(motion);
 	glutMouseWheelFunc(mouseWheel);
+	glutIdleFunc(updateFPS);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -106,249 +151,88 @@ void init()
 	initGameObjects();
 
 	glClearColor(101 / 225.0F, 196 / 255.0F, 244 / 255.0F, 1);
+
+	// Enable lighting
+	glEnable(GL_LIGHTING);
+
+	// Create a light
+	GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+	GLfloat diffuse_red[] = { 1.0, 0.0, 0.0, 1.0 };
+
+	// Create a directional light
+	GLfloat directionalLightPosition[] = { 1.0, 1.0, 1.0, 0.0 }; // Directional light from the direction (1, 1, 1)
+	Light directionalLight(GL_LIGHT0, Light::DIRECTIONAL, directionalLightPosition, ambient, diffuse, specular);
+	directionalLight.enable();
+
+	// Create a spot light
+	GLfloat spotLightPosition[] = { -1.0, 0.0, 1.0, 1.0 }; // Positional light at (-1, 0, 1)
+	Light spotLight(GL_LIGHT2, Light::SPOT, spotLightPosition, ambient, diffuse_red, specular);
+	spotLight.enable();
+
+	// Enable depth testing
+	glEnable(GL_DEPTH_TEST);
 }
 
 void initGameObjects()
 {
 	textureManager = new TextureManager();
-	chessboard = new Chessboard(textureManager);
-	terrain = new Terrain(textureManager->getTexture("Heightmap"), 100, 10);
+	chesspieces_black = new Model("Models", "Chesspieces");
+	chesspieces_white = new Model("Models", "Chesspieces");
+	chessboard = new Model("Models", "chessboard");
+	terrain = new Model("Models", "Terrain");
+
+	//Generate Display Lists
+	chessboard->GenerateDisplayList();
 	terrain->GenerateDisplayList();
-
-	//Place Pieces
-
-	int maxX = 8;
-	int maxY = 8;
-
-	for (int x = 0; x < maxX; x++)
-	{
-		for (int y = 0; y < maxY; y++)
-		{
-			float xPos = x - 3.5F;
-			float yPos = y - 3.5F;
-			float height = 1.80F;
-
-			//WHITE_ROOKS
-			if (x == 0 && y == 0 || x == maxX - 1 && y == 0)
-			{
-				boardPieces[x][y] = new Rook(PieceColour::WHITE);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//BLACK_ROOKS
-			if (x == 0 && y == maxY - 1 || x == maxX - 1 && y == maxY - 1)
-			{
-				boardPieces[x][y] = new Rook(PieceColour::BLACK);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//WHITE_KNIGHTS
-			if (x == 1 && y == 0 || x == maxX - 2 && y == 0)
-			{
-				boardPieces[x][y] = new Knight(PieceColour::WHITE);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//BLACK_KNIGHT
-			if (x == 1 && y == maxY - 1 || x == maxX - 2 && y == maxY - 1)
-			{
-				boardPieces[x][y] = new Knight(PieceColour::BLACK);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				boardPieces[x][y]->SetRotation(vec3(0, 180, 0));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//WHITE_BISHOPS 
-			if (x == 2 && y == 0 || x == maxX - 3 && y == 0)
-			{
-				boardPieces[x][y] = new Bishop(PieceColour::WHITE);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//BLACK_BISHOP 
-			if (x == 2 && y == maxY - 1 || x == maxX - 3 && y == maxY - 1)
-			{
-				boardPieces[x][y] = new Bishop(PieceColour::BLACK);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//WHITE_QUEEN
-			if (x == 3 && y == 0)
-			{
-				boardPieces[x][y] = new Queen(PieceColour::WHITE);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//BLACK_QUEEN
-			if (x == 3 && y == maxY - 1)
-			{
-				boardPieces[x][y] = new Queen(PieceColour::BLACK);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//BLACK_KING
-			if (x == 4 && y == maxY - 1)
-			{
-				boardPieces[x][y] = new King(PieceColour::BLACK);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//WHITE_KING
-			if (x == 4 && y == 0)
-			{
-				boardPieces[x][y] = new King(PieceColour::WHITE);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//WHITE_PAWNS
-			if (x < maxX - 1 && y == 1)
-			{
-				boardPieces[x][y] = new Pawn(PieceColour::WHITE);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-
-			//WHITE_PAWNS
-			if (x < maxX - 1 && y == maxY - 2)
-			{
-				boardPieces[x][y] = new Pawn(PieceColour::BLACK);
-
-				boardPieces[x][y]->SetPosition(vec3(xPos, height, yPos));
-
-				//SET ORIGINAL POSITION
-				boardPieces[x][y]->originalPosition = vec3(xPos, height, yPos);
-			}
-		}
-	}
-
-	terrain->setPosition(vec3(0, 3.0F, 0));
+	chesspieces_white->GenerateDisplayList();
+	chesspieces_black->GenerateDisplayList();
+	chesspieces_black->setRotation(vec3(0, 180, 0));
 }
 
 void cleanUp()
 {
 	//Garbage Collection.
 	delete textureManager;
+	delete input;
+	delete chesspieces_black;
+	delete chesspieces_white;
 	delete chessboard;
 	delete terrain;
-	delete input;
-	delete boardPieces;
 }
 
-float animationTimer = 0;
-
 void display() {
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera.GetViewMatrix()));
 
+	//Lighting
+
+	glEnable(GL_LIGHTING);
+	
 	// Draw your 3D scene here
+
+	textureManager->useTexture("white_marble");
+
+	chesspieces_white->draw();
+
+	textureManager->useTexture("black_marble");
+
+	chesspieces_black->draw();
+
+	textureManager->useTexture("chessboard");
 
 	chessboard->draw();
 
-	glDisable(GL_TEXTURE_2D);
+	//textureManager->useTexture("cladding");
 
-	textureManager->useTexture("cladding");
+	//terrain->draw();
 
-	terrain->draw();
-	
-	int boardXLength = 8;
-	int boardYLength = 8;
-
-	glDisable(GL_TEXTURE_2D);
-
-	//ANIMATION TIMER
-	if (animationIsEnabled)
-		animationTimer += deltaTime;
-	else
-	{
-		animationTimer = 0;
-	}
-
-	for (int x = 0; x < boardXLength; x++)
-	{
-		for (int y = 0; y < boardYLength; y++)
-		{
-			//skip null pieces.
-			if (boardPieces[x][y] == NULL)
-				continue;
-
-			//COLOUR THE PIECES USING TEXTURES
-			if (boardPieces[x][y]->GetColour() == PieceColour::BLACK)
-				textureManager->useTexture("black_marble");
-
-			if (boardPieces[x][y]->GetColour() == PieceColour::WHITE)
-				textureManager->useTexture("white_marble");
-
-			//ANIMATION
-
-			if (animationIsEnabled)
-			{
-				boardPieces[x][y]->MoveForward();
-
-				//Check if the pieces moved past the upper and lower limits of the board.
-				if (boardPieces[x][y]->getPosition().z > chessboard->getBoardTile(boardXLength, boardYLength).z ||
-					boardPieces[x][y]->getPosition().z < chessboard->getBoardTile(0, 0).z)
-				{
-					boardPieces[x][y]->SetPosition(boardPieces[x][y]->originalPosition);
-				}
-
-				animationTimer = 0;
-			}
-
-			if (!animationIsEnabled)
-			{
-				//RESET PIECE TO ORIGINAL POSITION IF ANIMATION IS DISABLED.
-				boardPieces[x][y]->SetPosition(boardPieces[x][y]->originalPosition);
-			}
-
-			//DRAW THE PIECE
-			boardPieces[x][y]->update();
-
-		}
-	}
+	if (displayFPS)
+		drawFPSCounter();
 
 	glutSwapBuffers();
 }
@@ -359,11 +243,6 @@ void timer(int)
 {
 	glutPostRedisplay();
 	glutTimerFunc(1000 / 120, timer, 0);
-
-	float currentFrame = GetCurrentTime();
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
-	deltaTime /= 1000;
 }
 
 void reshape(int width, int height) 
@@ -375,22 +254,15 @@ void reshape(int width, int height)
 	glLoadMatrixf(glm::value_ptr(camera.GetProjectionMatrix()));
 }
 
-void keyboard(unsigned char key, int x, int y) {
+void keyboard(unsigned char key, int x, int y) 
+{
+
 	camera.ProcessInput(key, x, y);
 
-	//32 is the spacebar
-	if (key == 32)
-	{
-		system("cls");
+	if (key == 27)
+		displayFPS = !displayFPS;
 
-		//toggle animation
-		animationIsEnabled = !animationIsEnabled;
-
-		if (animationIsEnabled)
-			cout << "enabled animation" << endl;
-		else
-			cout << "disabled animation" << endl;
-	}
+	cout << key;
 
 	glutPostRedisplay();
 }

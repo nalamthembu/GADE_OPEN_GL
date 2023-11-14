@@ -8,7 +8,7 @@ class GameObject
 
 	float originSize = 1.0f;
 
-	private:
+	protected:
 		bool displayListGenerated = false;
 		uint32_t displayListId;
 		vec3 position;

@@ -67,7 +67,7 @@ void GameObject::draw()
 
 void GameObject::drawGeometry()
 {
-
+	
 }
 
 void GameObject::drawOrigin()

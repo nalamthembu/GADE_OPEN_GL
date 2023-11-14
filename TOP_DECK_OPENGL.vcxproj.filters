@@ -9,12 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Chess Pieces">
-      <UniqueIdentifier>{507d7ced-2551-4c80-8701-b1ceee9c79dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primitive Shapes">
-      <UniqueIdentifier>{484073b5-22bc-445c-b105-bf2599db7ecd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering">
       <UniqueIdentifier>{4d467cf7-8f3d-42ba-ba5f-540633861c29}</UniqueIdentifier>
     </Filter>
@@ -29,9 +23,6 @@
     <ClCompile Include="components\TextureCube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="components\Chessboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,49 +32,13 @@
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Chesspiece.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="Pawn.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="King.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="Rook.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="Queen.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="Bishop.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="Knight.cpp">
-      <Filter>Chess Pieces</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives\Torus.cpp">
-      <Filter>Primitive Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives\Sphere.cpp">
-      <Filter>Primitive Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives\PrimitiveShape.cpp">
-      <Filter>Primitive Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives\Cylinder.cpp">
-      <Filter>Primitive Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives\Cube.cpp">
-      <Filter>Primitive Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives\Cone.cpp">
-      <Filter>Primitive Shapes</Filter>
-    </ClCompile>
     <ClCompile Include="components\Texture.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="components\TextureManager.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,37 +55,10 @@
     <ClInclude Include="components\Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\Chessboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Queen.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="Rook.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="King.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="Knight.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="Pawn.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="PieceColour.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="Bishop.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="Chesspiece.h">
-      <Filter>Chess Pieces</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Vertex.h">
+    <ClInclude Include="Rendering\VertexQ.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\Quad.h">
@@ -138,24 +66,6 @@
     </ClInclude>
     <ClInclude Include="Rendering\QuadTexCoord.h">
       <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives\Cone.h">
-      <Filter>Primitive Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives\Cube.h">
-      <Filter>Primitive Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives\Cylinder.h">
-      <Filter>Primitive Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives\PrimitiveShape.h">
-      <Filter>Primitive Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives\Sphere.h">
-      <Filter>Primitive Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives\Torus.h">
-      <Filter>Primitive Shapes</Filter>
     </ClInclude>
     <ClInclude Include="components\Texture.h">
       <Filter>Rendering</Filter>
@@ -165,6 +75,21 @@
     </ClInclude>
     <ClInclude Include="components\TextureManager.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Model.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\ModelPart.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Vertex.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Skybox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

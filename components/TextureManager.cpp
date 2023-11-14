@@ -34,6 +34,9 @@ TextureManager::TextureManager()
 	textures.insert({ "white_marble", new Texture("Textures/white_marble.png") });
 	textures.insert({ "black_marble", new Texture("Textures/black_marble.png") });
 
+	textures.insert({ "chessboard", new Texture("Textures/Chessboard_Texture.png") });
+
+
 }
 
 TextureManager::~TextureManager()

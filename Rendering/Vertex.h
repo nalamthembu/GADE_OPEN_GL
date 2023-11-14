@@ -1,24 +1,10 @@
 #pragma once
-
-//This is a struct that stores the (x,y,z) components of a vertex.
+#include <glm/glm.hpp>
 struct Vertex
 {
-	float x;
-	float y;
-	float z;
-
-	Vertex(float x, float y, float z)
-	{
-		//VERTEX POSITIONS
-		this->x = x;
-		this->y = y;
-		this->z = z;
-	}
-
-	Vertex()
-	{
-		x = 0;
-		y = 0;
-		z = 0;
-	}
+public:
+    glm::vec3 position;
+    glm::vec3 colour;
+    glm::vec3 normal;
+    glm::vec2 texCoord;
 };

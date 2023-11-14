@@ -1,10 +1,12 @@
 #include "Model.h"
 #include <iostream>
 
+using namespace std;
+
 Model::Model(string path, string name)
 {
 	loadModel(path, name);
-	drawGeometry();
+
 }
 
 Model::~Model()
@@ -98,43 +100,38 @@ void Model::loadModel(std::string path, std::string name)
 		parts.push_back(part);
 	}
 }
-
 void Model::drawGeometry()
 {
-	id = glGenLists(1);
+	if (displayListGenerated)
+	{
+		glCallList(displayListId);
+
+		return;
+	}	
 
 	int shapeIndex = 0;
-	glNewList(id, GL_COMPILE);
+
+	for (ModelPart p : parts)
 	{
-		for (ModelPart p : parts)
+		if (shapeIndex < textures.size())
 		{
-			if (shapeIndex < textures.size())
-			{
-				textures[shapeIndex]->use();
-			}
-
-			glBegin(GL_TRIANGLES);
-			{
-				for (int i = 0; i < p.indices.size(); i++)
-				{
-					Vertex v = p.vertices[i];
-					glColor3f(v.colour.x, v.colour.y, v.colour.z);
-					glNormal3f(v.normal.x, v.normal.y, v.normal.z);
-					glTexCoord2f(v.texCoord.x, v.texCoord.y);
-					glVertex3f(v.position.x, v.position.y, v.position.z);
-
-				}
-			}
-			glEnd();
-			shapeIndex++;
+			textures[shapeIndex]->use();
 		}
 
+		glBegin(GL_TRIANGLES);
+		{
+			for (int i = 0; i < p.indices.size(); i++)
+			{
+				Vertex v = p.vertices[i];
+				glColor3f(v.colour.x, v.colour.y, v.colour.z);
+				glNormal3f(v.normal.x, v.normal.y, v.normal.z);
+				glTexCoord2f(v.texCoord.x, v.texCoord.y);
+				glVertex3f(v.position.x, v.position.y, v.position.z);
+
+			}
+		}
+		glEnd();
+		shapeIndex++;
 	}
-	glEndList();
-}
 
-void Model::drawGeometry()
-{
-	glCallList(id);
 }
-

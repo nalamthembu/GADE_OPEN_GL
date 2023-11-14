@@ -19,56 +19,33 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bishop.cpp" />
-    <ClCompile Include="Chesspiece.cpp" />
-    <ClCompile Include="components\Chessboard.cpp" />
     <ClCompile Include="components\GameObject.cpp" />
     <ClCompile Include="components\Terrain.cpp" />
     <ClCompile Include="components\Texture.cpp" />
     <ClCompile Include="components\TextureCube.cpp" />
     <ClCompile Include="components\TextureManager.cpp" />
-    <ClCompile Include="King.cpp" />
-    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
-    <ClCompile Include="Primitives\Cone.cpp" />
-    <ClCompile Include="Primitives\Cube.cpp" />
-    <ClCompile Include="Primitives\Cylinder.cpp" />
-    <ClCompile Include="Primitives\PrimitiveShape.cpp" />
-    <ClCompile Include="Primitives\Sphere.cpp" />
-    <ClCompile Include="Primitives\Torus.cpp" />
-    <ClCompile Include="Queen.cpp" />
-    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="stb.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bishop.h" />
-    <ClInclude Include="Chesspiece.h" />
     <ClInclude Include="components\Camera.h" />
-    <ClInclude Include="components\Chessboard.h" />
     <ClInclude Include="components\GameObject.h" />
     <ClInclude Include="components\Pixel.h" />
     <ClInclude Include="components\Terrain.h" />
     <ClInclude Include="components\Texture.h" />
     <ClInclude Include="components\TextureCube.h" />
     <ClInclude Include="components\TextureManager.h" />
-    <ClInclude Include="King.h" />
-    <ClInclude Include="Knight.h" />
-    <ClInclude Include="Pawn.h" />
-    <ClInclude Include="PieceColour.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="PlayerInput.h" />
-    <ClInclude Include="Primitives\Cone.h" />
-    <ClInclude Include="Primitives\Cube.h" />
-    <ClInclude Include="Primitives\Cylinder.h" />
-    <ClInclude Include="Primitives\PrimitiveShape.h" />
-    <ClInclude Include="Primitives\Sphere.h" />
-    <ClInclude Include="Primitives\Torus.h" />
-    <ClInclude Include="Queen.h" />
+    <ClInclude Include="Rendering\Model.h" />
+    <ClInclude Include="Rendering\ModelPart.h" />
     <ClInclude Include="Rendering\Quad.h" />
     <ClInclude Include="Rendering\QuadTexCoord.h" />
+    <ClInclude Include="Rendering\Skybox.h" />
     <ClInclude Include="Rendering\Vertex.h" />
-    <ClInclude Include="Rook.h" />
+    <ClInclude Include="Rendering\VertexQ.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -128,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)components;$(SolutionDir)Rendering;$(SolutionDir)include\KHR;$(SolutionDir)include;$(SolutionDir)Primitives;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)components;$(SolutionDir)Rendering;$(SolutionDir)include\KHR;$(SolutionDir)include;$(SolutionDir)Primitives;$(SolutionDir)Models;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

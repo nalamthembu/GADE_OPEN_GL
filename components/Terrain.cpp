@@ -46,10 +46,10 @@ void Terrain::generateGeometry()
             //Make a quad
             Quad single_quad;
 
-            single_quad.vert1 = Vertex(vx1, vy1, vz1);
-            single_quad.vert2 = Vertex(vx2, vy2, vz2);
-            single_quad.vert3 = Vertex(vx3, vy3, vz3);
-            single_quad.vert4 = Vertex(vx4, vy4, vz4);
+            single_quad.vert1 = VertexQ(vx1, vy1, vz1);
+            single_quad.vert2 = VertexQ(vx2, vy2, vz2);
+            single_quad.vert3 = VertexQ(vx3, vy3, vz3);
+            single_quad.vert4 = VertexQ(vx4, vy4, vz4);
 
             QuadTexCoord texCoord = QuadTexCoord
             (
