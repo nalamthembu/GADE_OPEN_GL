@@ -9,27 +9,13 @@ using namespace std;
 TextureManager::TextureManager()
 {
 	textures.insert({ "brick", new Texture("Textures/bricks.png") });
-	textures.insert({ "dirt_seamless", new Texture("Textures/dirt_seamless.png") });
-
-	textures.insert({ "planks", new Texture("Textures/spruce_planks.png") });
-
-	textures.insert({ "mossy_bricks", new Texture("Textures/mossy_stone_bricks.png") });
 
 	textures.insert({ "cladding", new Texture("Textures/cladding.png") });
 
-	textures.insert({ "tuff_grass", new Texture("Textures/tough_grass.png") });
-	
-	textures.insert({ "dirt", new Texture("Textures/dirt.png") });
-
-
 	textures.insert({ "gold", new Texture("Textures/gold_block.png") });
+	
 	textures.insert({ "Heightmap", new Texture("Textures/height_map_top_deck.png",3) });
 
-	textures.insert({ "Heightmap_GTA5", new Texture("Textures/gta5_heightmap.png") });
-	textures.insert({ "Colourmap_GTA5", new Texture("Textures/gta5_colourmap.png") });
-
-	textures.insert({ "black_block", new Texture("Textures/black_block.png") });
-	textures.insert({ "white_block", new Texture("Textures/white_block.png") });
 
 	textures.insert({ "white_marble", new Texture("Textures/white_marble.png") });
 	textures.insert({ "black_marble", new Texture("Textures/black_marble.png") });
@@ -37,6 +23,18 @@ TextureManager::TextureManager()
 	textures.insert({ "chessboard", new Texture("Textures/Chessboard_Texture.png") });
 
 	textures.insert({ "skybox", new Texture("Textures/cubemap-cross.jpg") });
+
+	textures.insert({ "cb_radio", new Texture("Textures/cb_radio.png") });
+
+	textures.insert({ "wooden_table", new Texture("Textures/wooden_table.jpg") });
+
+	textures.insert({ "weapon_rifle", new Texture("Textures/weapon_rifle.png") });
+
+	textures.insert({ "weapon_shotgun", new Texture("Textures/shot_gun.png") });
+
+	textures.insert({ "prop_backpack", new Texture("Textures/tex_backpack.png") });
+
+	textures.insert({ "prop_ammobox_shotgun", new Texture("Textures/ammo_box_shotgun.png") });
 }
 
 TextureManager::~TextureManager()

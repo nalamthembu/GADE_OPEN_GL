@@ -48,9 +48,14 @@ PlayerInput* input;
 
 Model* chesspieces_white;
 Model* chesspieces_black;
-Model* terrain;
 Model* chessboard;
 Model* skyBox;
+Model* prop_cb_radio;
+Model* prop_wooden_table;
+Model* weapon_rifle;
+Model* weapon_shotgun;
+Model* prop_backpack;
+Model* prop_ammobox_shotgun;
 
 bool displayFPS = false;
 
@@ -58,11 +63,12 @@ bool displayFPS = false;
 int fps = 0;
 auto lastTime = std::chrono::high_resolution_clock::now();
 int frameCount = 0;
+double deltaTime = 0;
 
 // Function to update FPS and display it
 void updateFPS() {
 	auto currentTime = std::chrono::high_resolution_clock::now();
-	double deltaTime = std::chrono::duration<double, std::milli>(currentTime - lastTime).count() / 1000.0;
+	deltaTime = std::chrono::duration<double, std::milli>(currentTime - lastTime).count() / 1000.0;
 
 	frameCount++;
 
@@ -182,7 +188,7 @@ void initLights()
 	directionalLight.enable();
 
 	// Create a spot light
-	GLfloat spotLightPosition[] = { -1.0, 0.0, 1.0, 1.0 }; // Positional light at (-1, 0, 1)
+	GLfloat spotLightPosition[] = { -1.0, 5.0, 1.0, 1.0 }; // Positional light at (-1, 0, 1)
 	Light spotLight(GL_LIGHT2, Light::SPOT, spotLightPosition, ambient, diffuse, specular);
 	spotLight.enable();
 }
@@ -193,16 +199,83 @@ void initGameObjects()
 	chesspieces_black = new Model("Models", "Chesspieces");
 	chesspieces_white = new Model("Models", "Chesspieces");
 	chessboard = new Model("Models", "chessboard");
-	terrain = new Model("Models", "Terrain");
-    skyBox = new Model("Models", "Cube");
+	skyBox = new Model("Models", "Cube");
 	skyBox->SetScale(vec3(1, 1, 1) * 1000.0F);
 
 	//Generate Display Lists
 	chessboard->GenerateDisplayList();
-	terrain->GenerateDisplayList();
-	chesspieces_white->GenerateDisplayList();
+	chesspieces_white->setRotation(vec3(0, -90, 0));
 	chesspieces_black->GenerateDisplayList();
-	chesspieces_black->setRotation(vec3(0, 180, 0));
+	chesspieces_black->setRotation(vec3(0, 90, 0));
+
+
+	//Other props
+
+	float customModelScalar = 5.0F;
+
+	vec3 customModelScale = vec3(1, 1, 1) * customModelScalar;
+
+	prop_wooden_table = new Model("Models", "prop_wooden_table");
+	prop_wooden_table->GenerateDisplayList();
+	prop_wooden_table->SetScale(customModelScale + vec3(4, 0, 8));
+	prop_wooden_table->setPosition(vec3(0, -(0.95F * customModelScalar), 0));
+
+	prop_cb_radio = new Model("Models", "prop_cb_radio");
+	prop_cb_radio->GenerateDisplayList();
+	prop_cb_radio->SetScale(customModelScale);
+	prop_cb_radio->setPosition(vec3(4.5F, -0.35F, 4));
+	prop_cb_radio->setRotation(vec3(0, -45, 0));
+	
+	weapon_rifle = new Model("Models", "weapon_rifle");
+	weapon_rifle->GenerateDisplayList();
+	weapon_rifle->SetScale(customModelScale * 2.0F);
+	weapon_rifle->setRotation(vec3(0, 45, 90));
+	weapon_rifle->setPosition(vec3(6, -0.35F, -1));
+
+	weapon_shotgun = new Model("Models", "weapon_shotgun");
+	weapon_shotgun->GenerateDisplayList();
+	weapon_shotgun->SetScale(customModelScale * 2.0F);
+	weapon_shotgun->setRotation(vec3(0, 180, 90));
+	weapon_shotgun->setPosition(vec3(-4, -0.35F, -1));
+
+	prop_backpack = new Model("Models", "prop_backpack");
+	prop_backpack->GenerateDisplayList();
+	prop_backpack->SetScale(customModelScale * 2.0F);
+	prop_backpack->setRotation(vec3(0, -45, 0));
+	prop_backpack->setPosition(vec3(-8, -0.35F, 0));
+
+	prop_ammobox_shotgun = new Model("Models", "prop_ammobox_shotgun");
+	prop_ammobox_shotgun->GenerateDisplayList();
+	prop_ammobox_shotgun->SetScale(customModelScale);
+	prop_ammobox_shotgun->setRotation(vec3(0, -45, 0));
+	prop_ammobox_shotgun->setPosition(vec3(-7, -0.35F, 3));
+}
+
+void DrawCustomModels()
+{
+	textureManager->useTexture("cb_radio");
+
+	prop_cb_radio->draw();
+
+	textureManager->useTexture("wooden_table");
+
+	prop_wooden_table->draw();
+
+	textureManager->useTexture("weapon_rifle");
+
+	weapon_rifle->draw();
+
+	textureManager->useTexture("weapon_shotgun");
+
+	weapon_shotgun->draw();
+
+	textureManager->useTexture("prop_backpack");
+
+	prop_backpack->draw();
+
+	textureManager->useTexture("prop_ammobox_shotgun");
+
+	prop_ammobox_shotgun->draw();
 }
 
 void cleanUp()
@@ -213,8 +286,16 @@ void cleanUp()
 	delete chesspieces_black;
 	delete chesspieces_white;
 	delete chessboard;
-	delete terrain;
 	delete skyBox;
+
+	//Delete Custom Models
+	delete prop_wooden_table;
+	delete prop_cb_radio;
+	delete weapon_rifle;
+	delete weapon_shotgun;
+	delete prop_backpack;
+	delete prop_ammobox_shotgun;
+
 }
 
 void display() {
@@ -222,6 +303,8 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera.GetViewMatrix()));
+
+	camera.UpdateDeltaTime(deltaTime);
 	
 	glDisable(GL_LIGHTING);
 
@@ -232,6 +315,8 @@ void display() {
 	glEnable(GL_LIGHTING);
 	
 	// Draw your 3D scene here
+
+	DrawCustomModels();
 
 	textureManager->useTexture("white_marble");
 
@@ -244,11 +329,6 @@ void display() {
 	textureManager->useTexture("chessboard");
 
 	chessboard->draw();
-
-	//textureManager->useTexture("cladding");
-
-	//terrain->draw();
-
 
 	if (displayFPS)
 		drawFPSCounter();

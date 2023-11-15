@@ -17,6 +17,11 @@ public:
         this->ScreenWidth = screenWidth;
     }
 
+    void UpdateDeltaTime(double deltaTime)
+    {
+        this->deltaTime = deltaTime;
+    }
+
     glm::mat4 GetViewMatrix() {
         return glm::lookAt(position, position + front, up);
     }
@@ -26,8 +31,14 @@ public:
         return glm::perspective(glm::radians(fov), (float)screenWidth / (float)screenHeight, 0.01f, 5000.0F);
     }
 
-    void ProcessInput(unsigned char key, int x, int y) {
-        float cameraSpeed = 2.5f;
+    void ProcessInput(unsigned char key, int x, int y) {   
+        
+        float cameraSpeed = 1.50f * deltaTime;
+
+        if (key == 'q')
+            position += cameraSpeed * up;
+        if (key == 'e')
+            position += -cameraSpeed * up;
         if (key == 'w')
             position += cameraSpeed * front;
         if (key == 's')
@@ -101,6 +112,8 @@ private:
     float lastX = 400.0f;
     float lastY = 300.0f;
     bool firstMouse = true;
+    double deltaTime = 0;
+
 
     void UpdateCameraVectors() {
         glm::vec3 newFront;

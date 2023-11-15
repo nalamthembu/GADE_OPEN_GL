@@ -21,7 +21,6 @@ protected:
 	uint32_t displayListId;
 
 	public:
-		//method for setting position
 		void GenerateDisplayList();
 		void setPosition(vec3 position);
 		void setRotation(vec3 rotation);

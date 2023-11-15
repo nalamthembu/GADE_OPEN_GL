@@ -12,6 +12,8 @@ void GameObject::GenerateDisplayList()
 	}
 	glEndList();
 	displayListGenerated = true;
+
+	std::cout << "Generated Display List" << std::endl;
 }
 
 void GameObject::setPosition(vec3 position)
@@ -67,7 +69,7 @@ void GameObject::draw()
 
 void GameObject::drawGeometry()
 {
-	
+	std::cout << "Not Implemented" << std::endl;
 }
 
 void GameObject::drawOrigin()
