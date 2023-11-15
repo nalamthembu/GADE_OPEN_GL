@@ -8,15 +8,17 @@ class GameObject
 
 	float originSize = 1.0f;
 
-	protected:
-		bool displayListGenerated = false;
-		uint32_t displayListId;
+	private:
 		vec3 position;
 		vec3 rotation;
 		vec3 scale = vec3(1,1,1);
 		virtual void drawGeometry();
 		void drawOrigin();
 		
+
+protected:
+	bool displayListGenerated = false;
+	uint32_t displayListId;
 
 	public:
 		//method for setting position

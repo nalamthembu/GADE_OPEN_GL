@@ -1,8 +1,9 @@
 #pragma region BOILER_INCLUDES
+#include <GL/glew.h>
 #include <iostream>
 
 #include "PlayerInput.h"
-#include <GL/glew.h>
+
 #include <GL/freeglut.h>
 
 #include <glm/glm.hpp>
@@ -19,6 +20,7 @@
 #include "Light.h"
 #include "Model.h"
 
+
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tinyobjloader/tiny_obj_loader.h>
 
@@ -28,6 +30,7 @@ const int HEIGHT = 480;
 void init();
 void display();
 void initGameObjects();
+void initLights();
 void cleanUp();
 void keyboard(unsigned char key, int x, int y);
 void timer(int);
@@ -47,6 +50,7 @@ Model* chesspieces_white;
 Model* chesspieces_black;
 Model* terrain;
 Model* chessboard;
+Model* skyBox;
 
 bool displayFPS = false;
 
@@ -88,13 +92,13 @@ void drawFPSCounter()
 	glLoadIdentity();
 
 	// Draw FPS counter
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0, 0.0, 0.0);
 	glRasterPos2f(-0.95, 0.9); // Adjusted position to top-left corner
 	std::stringstream ss;
 	ss << "FPS: " << std::setw(3) << std::setfill(' ') << fps;
 	std::string fpsString = ss.str();
 	for (char c : fpsString) {
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 	}
 
 	// Restore the modelview matrix
@@ -108,6 +112,7 @@ void drawFPSCounter()
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
+	
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
 	int windowX = (int)(glutGet(GLUT_SCREEN_WIDTH) - WIDTH) / 2;
@@ -117,6 +122,8 @@ int main(int argc, char* argv[])
 	glutInitWindowSize(WIDTH, HEIGHT);
 
 	glutCreateWindow("OpenGL Chess");
+
+	glewInit();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -152,6 +159,15 @@ void init()
 
 	glClearColor(101 / 225.0F, 196 / 255.0F, 244 / 255.0F, 1);
 
+
+	initLights();
+
+	// Enable depth testing
+	glEnable(GL_DEPTH_TEST);
+}
+
+void initLights()
+{
 	// Enable lighting
 	glEnable(GL_LIGHTING);
 
@@ -160,8 +176,6 @@ void init()
 	GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
 
-	GLfloat diffuse_red[] = { 1.0, 0.0, 0.0, 1.0 };
-
 	// Create a directional light
 	GLfloat directionalLightPosition[] = { 1.0, 1.0, 1.0, 0.0 }; // Directional light from the direction (1, 1, 1)
 	Light directionalLight(GL_LIGHT0, Light::DIRECTIONAL, directionalLightPosition, ambient, diffuse, specular);
@@ -169,11 +183,8 @@ void init()
 
 	// Create a spot light
 	GLfloat spotLightPosition[] = { -1.0, 0.0, 1.0, 1.0 }; // Positional light at (-1, 0, 1)
-	Light spotLight(GL_LIGHT2, Light::SPOT, spotLightPosition, ambient, diffuse_red, specular);
+	Light spotLight(GL_LIGHT2, Light::SPOT, spotLightPosition, ambient, diffuse, specular);
 	spotLight.enable();
-
-	// Enable depth testing
-	glEnable(GL_DEPTH_TEST);
 }
 
 void initGameObjects()
@@ -183,6 +194,8 @@ void initGameObjects()
 	chesspieces_white = new Model("Models", "Chesspieces");
 	chessboard = new Model("Models", "chessboard");
 	terrain = new Model("Models", "Terrain");
+    skyBox = new Model("Models", "Cube");
+	skyBox->SetScale(vec3(1, 1, 1) * 1000.0F);
 
 	//Generate Display Lists
 	chessboard->GenerateDisplayList();
@@ -201,6 +214,7 @@ void cleanUp()
 	delete chesspieces_white;
 	delete chessboard;
 	delete terrain;
+	delete skyBox;
 }
 
 void display() {
@@ -208,8 +222,12 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera.GetViewMatrix()));
+	
+	glDisable(GL_LIGHTING);
 
-	//Lighting
+	textureManager->useTexture("skybox");
+
+	skyBox->draw();
 
 	glEnable(GL_LIGHTING);
 	
@@ -230,6 +248,7 @@ void display() {
 	//textureManager->useTexture("cladding");
 
 	//terrain->draw();
+
 
 	if (displayFPS)
 		drawFPSCounter();
@@ -261,8 +280,6 @@ void keyboard(unsigned char key, int x, int y)
 
 	if (key == 27)
 		displayFPS = !displayFPS;
-
-	cout << key;
 
 	glutPostRedisplay();
 }

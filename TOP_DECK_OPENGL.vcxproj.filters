@@ -26,9 +26,6 @@
     <ClCompile Include="stb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="components\Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,20 +49,8 @@
     <ClInclude Include="components\TextureCube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInput.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\VertexQ.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Quad.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\QuadTexCoord.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="components\Texture.h">
       <Filter>Rendering</Filter>
@@ -87,9 +72,6 @@
     </ClInclude>
     <ClInclude Include="Rendering\Vertex.h">
       <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Skybox.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

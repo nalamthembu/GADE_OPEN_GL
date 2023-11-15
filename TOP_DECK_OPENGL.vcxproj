@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="components\GameObject.cpp" />
-    <ClCompile Include="components\Terrain.cpp" />
     <ClCompile Include="components\Texture.cpp" />
     <ClCompile Include="components\TextureCube.cpp" />
     <ClCompile Include="components\TextureManager.cpp" />
@@ -33,7 +32,6 @@
     <ClInclude Include="components\Camera.h" />
     <ClInclude Include="components\GameObject.h" />
     <ClInclude Include="components\Pixel.h" />
-    <ClInclude Include="components\Terrain.h" />
     <ClInclude Include="components\Texture.h" />
     <ClInclude Include="components\TextureCube.h" />
     <ClInclude Include="components\TextureManager.h" />
@@ -41,11 +39,7 @@
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="Rendering\Model.h" />
     <ClInclude Include="Rendering\ModelPart.h" />
-    <ClInclude Include="Rendering\Quad.h" />
-    <ClInclude Include="Rendering\QuadTexCoord.h" />
-    <ClInclude Include="Rendering\Skybox.h" />
     <ClInclude Include="Rendering\Vertex.h" />
-    <ClInclude Include="Rendering\VertexQ.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -111,10 +105,11 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)bin\freeglut.dll" "$(OutDir)"</Command>
+      <Command>copy "$(SolutionDir)bin\freeglut.dll" "$(OutDir)"
+copy "$(SolutionDir)bin\glew32.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -36,7 +36,7 @@ TextureManager::TextureManager()
 
 	textures.insert({ "chessboard", new Texture("Textures/Chessboard_Texture.png") });
 
-
+	textures.insert({ "skybox", new Texture("Textures/cubemap-cross.jpg") });
 }
 
 TextureManager::~TextureManager()
